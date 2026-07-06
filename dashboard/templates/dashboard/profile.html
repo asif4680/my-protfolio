@@ -1,0 +1,82 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Profile & Bio — Control Center{% endblock %}
+{% block page_title %}Profile &amp; Bio{% endblock %}
+{% block content %}
+
+<form method="post" enctype="multipart/form-data" class="form-grid">
+  {% csrf_token %}
+
+  <div class="dash-card">
+    <h3 class="dash-section-title" style="margin-top:0">About you</h3>
+    <div class="form-grid">
+      <div class="field-group">
+        <label for="{{ about_form.intro.id_for_label }}">Intro</label>
+        {{ about_form.intro }}
+      </div>
+      <div class="field-group">
+        <label for="{{ about_form.philosophy.id_for_label }}">Philosophy</label>
+        {{ about_form.philosophy }}
+      </div>
+      <div class="field-group">
+        <label for="{{ about_form.values.id_for_label }}">Personal values</label>
+        {{ about_form.values }}
+        <span class="help">{{ about_form.values.help_text }}</span>
+      </div>
+      <div class="field-group">
+        <label for="{{ about_form.portrait.id_for_label }}">Portrait photo</label>
+        {% if about_form.instance.portrait %}<span class="field-current-file">Current: {{ about_form.instance.portrait.name }}</span>{% endif %}
+        {{ about_form.portrait }}
+      </div>
+    </div>
+  </div>
+
+  <div class="dash-card">
+    <h3 class="dash-section-title" style="margin-top:0">Hero section (home page)</h3>
+    <div class="form-grid">
+      <div class="field-group">
+        <label for="{{ hero_form.eyebrow.id_for_label }}">Eyebrow text</label>
+        {{ hero_form.eyebrow }}
+      </div>
+      <div class="field-group">
+        <label for="{{ hero_form.headline_line1.id_for_label }}">Headline — line 1</label>
+        {{ hero_form.headline_line1 }}
+      </div>
+      <div class="field-group">
+        <label for="{{ hero_form.headline_line2.id_for_label }}">Headline — line 2 (highlighted)</label>
+        {{ hero_form.headline_line2 }}
+      </div>
+      <div class="field-group">
+        <label for="{{ hero_form.typed_roles.id_for_label }}">Typing animation roles</label>
+        {{ hero_form.typed_roles }}
+        <span class="help">{{ hero_form.typed_roles.help_text }}</span>
+      </div>
+      <div class="field-group">
+        <label for="{{ hero_form.statement.id_for_label }}">Statement</label>
+        {{ hero_form.statement }}
+      </div>
+      <div class="field-group">
+        <label>Buttons</label>
+        <div class="form-grid" style="grid-template-columns:1fr 1fr;display:grid">
+          {{ hero_form.cta_primary_label }}
+          {{ hero_form.cta_primary_url }}
+          {{ hero_form.cta_secondary_label }}
+          {{ hero_form.cta_secondary_url }}
+        </div>
+      </div>
+      <div class="field-group">
+        <label>Stats shown on homepage</label>
+        <div class="form-grid" style="grid-template-columns:1fr 1fr 1fr;display:grid">
+          {{ hero_form.years_experience }}
+          {{ hero_form.projects_shipped }}
+          {{ hero_form.happy_clients }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn--primary">Save changes</button>
+  </div>
+</form>
+
+{% endblock %}

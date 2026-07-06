@@ -1,0 +1,24 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Messages — Control Center{% endblock %}
+{% block page_title %}Messages{% endblock %}
+{% block content %}
+
+{% if messages_list %}
+<div class="list-rows">
+  {% for msg in messages_list %}
+  <a href="{% url 'dashboard:message_detail' msg.pk %}" class="list-row message-row {% if not msg.is_read %}is-unread{% endif %}">
+    <div class="list-row__body">
+      <div class="list-row__title">
+        {{ msg.name }} &lt;{{ msg.email }}&gt;
+        {% if not msg.is_read %}<span class="tag tag--unread">New</span>{% endif %}
+      </div>
+      <div class="list-row__sub">{{ msg.subject|default:"No subject" }} — {{ msg.created_at|date:"M j, Y g:i A" }}</div>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">No messages yet. When someone submits your contact form, it'll show up here.</div>
+{% endif %}
+
+{% endblock %}

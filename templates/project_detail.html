@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}{{ project.title }} — {{ site.site_name }}{% endblock %}
+{% block meta_description %}{{ project.summary }}{% endblock %}
+{% block content %}
+
+<section class="detail-hero">
+  <div class="container">
+    <span class="eyebrow" data-aos="fade-up">{{ project.category.name|default:"Project" }} · {{ project.year }}</span>
+    <h1 class="detail-hero__title" data-aos="fade-up" data-aos-delay="80">{{ project.title }}</h1>
+    <p class="detail-hero__summary" data-aos="fade-up" data-aos-delay="140">{{ project.summary }}</p>
+    <dl class="detail-meta" data-aos="fade-up" data-aos-delay="200">
+      {% if project.client %}<div><dt>Client</dt><dd>{{ project.client }}</dd></div>{% endif %}
+      <div><dt>Role</dt><dd>{{ project.role }}</dd></div>
+      <div><dt>Year</dt><dd>{{ project.year }}</dd></div>
+      {% if project.live_url %}<div><dt>Live</dt><dd><a href="{{ project.live_url }}" target="_blank" rel="noopener" class="link-arrow" data-cursor="hover">Visit site <span class="arrow">↗</span></a></dd></div>{% endif %}
+    </dl>
+  </div>
+</section>
+
+<div class="container" data-aos="zoom-in-up">
+  <div class="detail-cover">
+    {% if project.cover %}
+      <img src="{{ project.cover.url }}" alt="{{ project.title }} cover" data-parallax="-8">
+    {% else %}
+      <div class="project-card__ph">
+        <span>{{ project.title }}</span>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="article">
+      {% for label, body in project.sections %}
+      <div class="article__section" data-aos="fade-up">
+        <h2>{{ label }}</h2>
+        <p>{{ body }}</p>
+      </div>
+      {% endfor %}
+
+      {% if project.prototype_url %}
+      <div class="article__section" data-aos="fade-up">
+        <h2>Prototype preview</h2>
+        <div class="proto-frame">
+          <iframe src="{{ project.prototype_url }}" title="Interactive prototype of {{ project.title }}" loading="lazy" allowfullscreen></iframe>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    {% if project.images.all %}
+    <div class="gallery" style="max-width:960px;margin-inline:auto">
+      <h2 class="section-title" style="font-size:1.6rem" data-aos="fade-up">Final screens</h2>
+      {% for shot in project.images.all %}
+      <figure data-aos="fade-up">
+        <img src="{{ shot.image.url }}" alt="{{ shot.caption|default:project.title }}" loading="lazy">
+        {% if shot.caption %}<figcaption>{{ shot.caption }}</figcaption>{% endif %}
+      </figure>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if next_project %}
+    <a href="{{ next_project.get_absolute_url }}" class="next-project" data-cursor="view" data-aos="fade-up">
+      <small>Next project</small>
+      <h3>{{ next_project.title }} <span class="arrow">→</span></h3>
+    </a>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Contact — {{ site.site_name }}{% endblock %}
+{% block content %}
+
+<section class="detail-hero">
+  <div class="container">
+    <span class="eyebrow" data-aos="fade-up">Contact</span>
+    <h1 class="detail-hero__title" data-aos="fade-up" data-aos-delay="100">
+      Tell me about<br>your <em>project</em></h1>
+    <p class="detail-hero__summary" data-aos="fade-up" data-aos-delay="160">
+      I reply to every message within one business day. The more context you share, the better my first answer will be.</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top:1rem">
+  <div class="container contact-grid">
+    <div class="contact-info" data-aos="fade-right">
+      <dl class="contact-info__item">
+        <dt>Email</dt>
+        <dd><a href="mailto:{{ site.email }}" data-cursor="hover">{{ site.email }}</a></dd>
+      </dl>
+      {% if site.phone %}
+      <dl class="contact-info__item">
+        <dt>Phone</dt>
+        <dd><a href="tel:{{ site.phone }}" data-cursor="hover">{{ site.phone }}</a></dd>
+      </dl>
+      {% endif %}
+      <dl class="contact-info__item">
+        <dt>Location</dt>
+        <dd><a>{{ site.location }}</a></dd>
+      </dl>
+      <dl class="contact-info__item">
+        <dt>Elsewhere</dt>
+        <dd style="display:flex;gap:1.2rem;flex-wrap:wrap">
+          {% for link in social_links %}
+          <a href="{{ link.url }}" target="_blank" rel="noopener" class="link-arrow" data-cursor="hover">
+            {{ link.get_platform_display }} <span class="arrow">↗</span></a>
+          {% endfor %}
+        </dd>
+      </dl>
+    </div>
+
+    <form method="post" class="form glass" data-aos="fade-left" novalidate>
+      {% csrf_token %}
+      <div class="form__row">
+        <div class="field">
+          <label for="{{ form.name.id_for_label }}">Name</label>
+          {{ form.name }}{{ form.name.errors }}
+        </div>
+        <div class="field">
+          <label for="{{ form.email.id_for_label }}">Email</label>
+          {{ form.email }}{{ form.email.errors }}
+        </div>
+      </div>
+      <div class="field">
+        <label for="{{ form.subject.id_for_label }}">Subject</label>
+        {{ form.subject }}{{ form.subject.errors }}
+      </div>
+      <div class="field">
+        <label for="{{ form.message.id_for_label }}">Message</label>
+        {{ form.message }}{{ form.message.errors }}
+      </div>
+      <button type="submit" class="btn btn--primary btn--lg magnetic" data-cursor="hover">
+        Send message <span class="arrow">→</span></button>
+    </form>
+  </div>
+</section>
+
+{% endblock %}

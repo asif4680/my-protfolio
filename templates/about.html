@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% block title %}About — {{ site.site_name }}{% endblock %}
+{% block content %}
+
+<section class="detail-hero">
+  <div class="container">
+    <span class="eyebrow" data-aos="fade-up">About me</span>
+    <h1 class="detail-hero__title" data-aos="fade-up" data-aos-delay="100">
+      Designer by discipline,<br><em>developer by curiosity.</em></h1>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0">
+  <div class="container split">
+    <div class="portrait-frame" data-aos="fade-right">
+      {% if about.portrait %}
+        <img src="{{ about.portrait.url }}" alt="Portrait of {{ site.site_name }}" data-parallax="-8" loading="lazy">
+      {% else %}
+        <span class="portrait-frame__ph">{{ site.logo_text }}</span>
+      {% endif %}
+    </div>
+    <div id="resume" data-aos="fade-left">
+      <p class="big-quote">{{ about.intro }}</p>
+      <p class="section-lede" style="margin-top:1.6rem">{{ about.philosophy }}</p>
+      {% if site.resume %}
+      <a href="{{ site.resume.url }}" class="btn btn--primary magnetic" style="margin-top:2rem" data-cursor="hover" download>
+        Download resume <span class="arrow">↓</span></a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- Design process — a genuine sequence, so numbered -->
+{% if process_steps %}
+<section class="section section--fog">
+  <div class="container">
+    <div class="section-head" data-aos="fade-up">
+      <span class="eyebrow">How I work</span>
+      <h2 class="section-title">My design process</h2>
+      <p class="section-lede">Every project moves through the same honest sequence — the order matters.</p>
+    </div>
+    <div class="process">
+      {% for step in process_steps %}
+      <div class="process__step" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}0">
+        <span class="process__num">{{ forloop.counter|stringformat:"02d" }}</span>
+        <div><h3>{{ step.title }}</h3><p>{{ step.description }}</p></div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- Experience & education -->
+<section class="section">
+  <div class="container">
+    <div class="grid grid--2" style="gap:4rem;align-items:start">
+      <div id="experience" data-aos="fade-up">
+        <span class="eyebrow">Career</span>
+        <h2 class="section-title" style="font-size:2rem;margin:.85rem 0 2.2rem">Experience</h2>
+        <div class="timeline">
+          {% for item in experience %}
+          <div class="timeline__item">
+            <span class="timeline__period">{{ item.period }}</span>
+            <h3 class="timeline__title">{{ item.title }}</h3>
+            <p class="timeline__org">{{ item.org }}</p>
+            {% if item.description %}<p class="timeline__desc">{{ item.description }}</p>{% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div id="education" data-aos="fade-up" data-aos-delay="100">
+        <span class="eyebrow">Learning</span>
+        <h2 class="section-title" style="font-size:2rem;margin:.85rem 0 2.2rem">Education</h2>
+        <div class="timeline">
+          {% for item in education %}
+          <div class="timeline__item">
+            <span class="timeline__period">{{ item.period }}</span>
+            <h3 class="timeline__title">{{ item.title }}</h3>
+            <p class="timeline__org">{{ item.org }}</p>
+            {% if item.description %}<p class="timeline__desc">{{ item.description }}</p>{% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Certifications -->
+{% if certifications %}
+<section class="section section--fog" id="certifications">
+  <div class="container">
+    <div class="section-head" data-aos="fade-up">
+      <span class="eyebrow">Credentials</span>
+      <h2 class="section-title">Certifications</h2>
+    </div>
+    <div class="grid grid--3">
+      {% for cert in certifications %}
+      <div class="tile" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}0">
+        <h3>{{ cert.title }}</h3>
+        <p>{{ cert.issuer }} — {{ cert.date }}</p>
+        {% if cert.credential_url %}
+        <a class="link-arrow" style="margin-top:1rem" href="{{ cert.credential_url }}" target="_blank" rel="noopener" data-cursor="hover">
+          Verify <span class="arrow">→</span></a>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- Values -->
+<section class="section section--fog">
+  <div class="container">
+    <div class="section-head" data-aos="fade-up">
+      <span class="eyebrow">What I stand for</span>
+      <h2 class="section-title">Personal values</h2>
+    </div>
+    <ul class="values" data-aos="fade-up">
+      {% for value in about.values_list %}<li>{{ value }}</li>{% endfor %}
+    </ul>
+  </div>
+</section>
+
+{% endblock %}

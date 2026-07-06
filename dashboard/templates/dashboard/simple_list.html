@@ -1,0 +1,45 @@
+{% extends "dashboard/base.html" %}
+{% block title %}{{ title }} — Control Center{% endblock %}
+{% block page_title %}{{ title }}{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <h2>{{ title }}</h2>
+  <a href="{% url add_url %}" class="btn btn--primary">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+    Add new
+  </a>
+</div>
+
+{% if items %}
+<div class="list-rows">
+  {% for item in items %}
+  <div class="list-row">
+    <div class="list-row__body">
+      <div class="list-row__title">
+        {{ item }}
+        {% if item.featured %}<span class="tag tag--on">Featured</span>{% endif %}
+        {% if not item.is_active %}<span class="tag">Hidden</span>{% endif %}
+      </div>
+      {% if item.description %}<div class="list-row__sub">{{ item.description|truncatewords:22 }}</div>
+      {% elif item.summary %}<div class="list-row__sub">{{ item.summary|truncatewords:22 }}</div>
+      {% elif item.quote %}<div class="list-row__sub">{{ item.quote|truncatewords:22 }}</div>
+      {% elif item.url %}<div class="list-row__sub">{{ item.url }}</div>
+      {% endif %}
+    </div>
+    <div class="list-row__actions">
+      <a href="{% url edit_url item.pk %}" class="icon-btn" title="Edit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      </a>
+      <a href="{% url delete_url item.pk %}" class="icon-btn icon-btn--danger" title="Delete">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0l-1 14a2 2 0 01-2 2H7a2 2 0 01-2-2L4 6"/></svg>
+      </a>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">Nothing here yet — click "Add new" to create the first one.</div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Testimonials — {{ site.site_name }}{% endblock %}
+{% block content %}
+
+<section class="detail-hero">
+  <div class="container">
+    <span class="eyebrow" data-aos="fade-up">Kind words</span>
+    <h1 class="detail-hero__title" data-aos="fade-up" data-aos-delay="100">
+      What it's like<br><em>working with me</em></h1>
+  </div>
+</section>
+
+<section class="section" style="padding-top:1rem">
+  <div class="container">
+    <div class="grid grid--3">
+      {% for t in testimonials %}
+      <div data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:'1' }}0">
+        {% include "partials/testimonial_card.html" %}
+      </div>
+      {% empty %}
+      <p class="section-lede">Testimonials coming soon.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}

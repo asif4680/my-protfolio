@@ -1,0 +1,27 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Resume — Control Center{% endblock %}
+{% block page_title %}Resume{% endblock %}
+{% block content %}
+
+<div class="dash-card form-card">
+  {% if site.resume %}
+  <p class="field-current-file" style="margin-bottom:1.2rem">
+    Current file: <a href="{{ site.resume.url }}" target="_blank" rel="noopener" style="color:var(--accent)">{{ site.resume.name }}</a>
+  </p>
+  {% else %}
+  <p class="field-current-file" style="margin-bottom:1.2rem">No resume uploaded yet.</p>
+  {% endif %}
+
+  <form method="post" enctype="multipart/form-data" class="form-grid">
+    {% csrf_token %}
+    <div class="field-group">
+      <label for="{{ form.resume.id_for_label }}">Upload new resume (PDF)</label>
+      {{ form.resume }}
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn--primary">Save</button>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,20 @@
+<a href="{{ project.get_absolute_url }}" class="project-card" data-cursor="view"
+   data-project-card data-category="{{ project.category.slug }}"
+   data-search="{{ project.title|lower }} {{ project.summary|lower }} {{ project.client|lower }}"
+   data-aos="fade-up" {% if forloop %}data-aos-delay="{{ forloop.counter0|add:'1' }}00"{% endif %}>
+  <div class="project-card__media">
+    {% if project.category %}<span class="project-card__tag">{{ project.category.name }}</span>{% endif %}
+    {% if project.cover %}
+      <img src="{{ project.cover.url }}" alt="{{ project.title }} cover" loading="lazy">
+    {% else %}
+      <div class="project-card__ph">
+        <span>{{ project.title|slice:":2"|upper }}</span>
+      </div>
+    {% endif %}
+  </div>
+  <div class="project-card__body">
+    <div class="project-card__meta"><span>{{ project.role }}</span></div>
+    <h3 class="project-card__title">{{ project.title }}</h3>
+    <p class="project-card__summary">{{ project.summary }}</p>
+  </div>
+</a>

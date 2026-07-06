@@ -1,0 +1,39 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Sign in — Control Center</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'dashboard/dashboard.css' %}">
+</head>
+<body>
+  <div class="login-shell">
+    <div class="login-card">
+      <span class="login-card__mark">{{ site.logo_text|default:"A" }}</span>
+      <h1>Control Center</h1>
+      <p>Sign in to manage your portfolio</p>
+
+      {% if form.non_field_errors %}
+      <div class="dash__flash" style="padding:0;margin-bottom:1rem">
+        <div class="dash__flash-item dash__flash-item--error">{{ form.non_field_errors.0 }}</div>
+      </div>
+      {% endif %}
+
+      <form method="post" class="form-grid">
+        {% csrf_token %}
+        <div class="field-group">
+          <label for="{{ form.username.id_for_label }}">Username</label>
+          {{ form.username }}
+        </div>
+        <div class="field-group">
+          <label for="{{ form.password.id_for_label }}">Password</label>
+          {{ form.password }}
+        </div>
+        <button type="submit" class="btn btn--primary btn--block">Sign in</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

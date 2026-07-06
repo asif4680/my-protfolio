@@ -1,0 +1,38 @@
+{% extends "dashboard/base.html" %}
+{% block title %}{{ title }} — Control Center{% endblock %}
+{% block page_title %}{{ title }}{% endblock %}
+{% block content %}
+
+{% if back_url %}
+<a href="{% url back_url %}" class="back-link">&larr; Back</a>
+{% endif %}
+
+<div class="dash-card form-card">
+  <form method="post" enctype="multipart/form-data" class="form-grid">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="field-group">
+      {% if field.field.widget.input_type == "checkbox" %}
+      <div class="field-check-row">
+        {{ field }}
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      </div>
+      {% else %}
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {% if field.field.widget.input_type == "file" and field.value %}
+      <span class="field-current-file">Current: {{ field.value }}</span>
+      {% endif %}
+      {{ field }}
+      {% if field.help_text %}<span class="help">{{ field.help_text }}</span>{% endif %}
+      {% endif %}
+      {{ field.errors }}
+    </div>
+    {% endfor %}
+    <div class="form-actions">
+      <button type="submit" class="btn btn--primary">Save</button>
+      {% if back_url %}<a href="{% url back_url %}" class="btn btn--ghost">Cancel</a>{% endif %}
+    </div>
+  </form>
+</div>
+
+{% endblock %}

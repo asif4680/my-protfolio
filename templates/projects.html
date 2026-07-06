@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Projects — {{ site.site_name }}{% endblock %}
+{% block content %}
+
+<section class="detail-hero">
+  <div class="container">
+    <span class="eyebrow" data-aos="fade-up">Work</span>
+    <h1 class="detail-hero__title" data-aos="fade-up" data-aos-delay="100">
+      Projects, from research<br>to <em>real screens</em></h1>
+  </div>
+</section>
+
+<section class="section" style="padding-top:1rem">
+  <div class="container">
+    <div class="toolbar" data-aos="fade-up">
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input type="search" id="projectSearch" placeholder="Search projects…" aria-label="Search projects" value="{{ query }}">
+      </div>
+    </div>
+
+    <div class="grid grid--2">
+      {% for project in projects %}
+        {% include "partials/project_card.html" %}
+      {% endfor %}
+    </div>
+    <p id="projectsEmpty" class="section-lede" hidden style="text-align:center;padding:3rem 0">
+      Nothing matches that yet — try a different filter or search term.</p>
+  </div>
+</section>
+
+{% endblock %}

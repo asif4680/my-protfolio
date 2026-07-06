@@ -1,0 +1,122 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>{% block title %}Control Center{% endblock %}</title>
+  <link rel="icon" href="{% static 'img/favicon.ico' %}" sizes="any">
+  <link rel="icon" type="image/svg+xml" href="{% static 'img/favicon.svg' %}">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'dashboard/dashboard.css' %}">
+</head>
+<body>
+  <div class="dash">
+    <aside class="dash__sidebar" id="dashSidebar">
+      <a href="{% url 'dashboard:home' %}" class="dash__brand">
+        <span class="dash__brand-mark">{{ site.logo_text|default:"A" }}</span>
+        <span class="dash__brand-text">{{ request.user.get_username }}<small>Admin</small></span>
+      </a>
+
+      <nav class="dash__nav">
+        <a href="{% url 'dashboard:home' %}" class="{% if active == 'home' %}is-active{% endif %}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>
+          Dashboard
+        </a>
+
+        <p class="dash__nav-label">About me</p>
+        <a href="{% url 'dashboard:profile' %}" class="{% if active == 'profile' %}is-active{% endif %}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1-4 3.8-6 7.5-6s6.5 2 7.5 6"/></svg>
+          Profile &amp; Bio
+        </a>
+
+        <p class="dash__nav-label">Contents</p>
+        <a href="{% url 'dashboard:resume' %}" class="{% if active == 'resume' %}is-active{% endif %}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg>
+          Resume
+        </a>
+        <a href="{% url 'dashboard:skills' %}" class="{% if active == 'skills' %}is-active{% endif %}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 6l-6 6 6 6M16 6l6 6-6 6M13 4l-2 16"/></svg>
+          Skills
+        </a>
+        <a href="{% url 'dashboard:experience_list' %}" class="{% if active == 'experience' %}is-active{% endif %}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+          Experience
+        </a>
+        <a href="{% url 'dashboard:project_list' %}" class="{% if active == 'projects' %}is-active{% endif %}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/></svg>
+          Projects
+        </a>
+        <a href="{% url 'dashboard:education_list' %}" class="{% if active == 'education' %}is-active{% endif %}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 9l10-5 10 5-10 5-10-5z"/><path d="M6 11v5c0 1.3 2.7 3 6 3s6-1.7 6-3v-5"/></svg>
+          Education
+        </a>
+        <a href="{% url 'dashboard:certification_list' %}" class="{% if active == 'certifications' %}is-active{% endif %}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg>
+          Certifications
+        </a>
+        <a href="{% url 'dashboard:message_list' %}" class="{% if active == 'messages' %}is-active{% endif %}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+          Messages
+          {% if dash_unread %}<span class="dash__badge">{{ dash_unread }}</span>{% endif %}
+        </a>
+
+        <p class="dash__nav-label">Site</p>
+        <a href="{% url 'dashboard:settings' %}" class="{% if active == 'settings' %}is-active{% endif %}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.9 2.9l-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.6V21a2 2 0 11-4 0v-.2a1.7 1.7 0 00-1-1.6 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 11-2.9-2.9l.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.6-1H3a2 2 0 110-4h.2a1.7 1.7 0 001.6-1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 112.9-2.9l.1.1a1.7 1.7 0 001.9.3H9.5a1.7 1.7 0 001-1.6V3a2 2 0 114 0v.2a1.7 1.7 0 001 1.6 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.9 2.9l-.1.1a1.7 1.7 0 00-.3 1.9V9.5a1.7 1.7 0 001.6 1H21a2 2 0 110 4h-.2a1.7 1.7 0 00-1.6 1z"/></svg>
+          Site settings
+        </a>
+        <a href="{% url 'dashboard:social_link_list' %}" class="{% if active == 'social' %}is-active{% endif %}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.6l6.8-4.2M8.6 13.4l6.8 4.2"/></svg>
+          Social links
+        </a>
+        <a href="{% url 'dashboard:account' %}" class="{% if active == 'account' %}is-active{% endif %}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          Account
+        </a>
+      </nav>
+
+      <form method="post" action="{% url 'dashboard:logout' %}" class="dash__logout">
+        {% csrf_token %}
+        <button type="submit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg>
+          Logout
+        </button>
+      </form>
+    </aside>
+
+    <div class="dash__main">
+      <header class="dash__topbar">
+        <button class="dash__menu-toggle" id="dashMenuToggle" aria-label="Toggle menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+        <h1 class="dash__topbar-title">{% block page_title %}Control Center{% endblock %}</h1>
+        <div class="dash__topbar-actions">
+          <span class="dash__whoami">Logged in as: <b>{{ request.user.get_username }}</b></span>
+          <a href="{% url 'home' %}" target="_blank" rel="noopener" class="dash__visit">Visit main site</a>
+        </div>
+      </header>
+
+      {% if messages %}
+      <div class="dash__flash">
+        {% for message in messages %}
+        <div class="dash__flash-item dash__flash-item--{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <main class="dash__content">
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+  </div>
+
+  <script>
+    var t = document.getElementById("dashMenuToggle"), s = document.getElementById("dashSidebar");
+    if (t) t.addEventListener("click", function () {
+      var open = s.classList.toggle("is-open");
+      t.setAttribute("aria-expanded", open);
+    });
+  </script>
+</body>
+</html>

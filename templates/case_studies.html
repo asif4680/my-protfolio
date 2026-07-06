@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Case studies — {{ site.site_name }}{% endblock %}
+{% block content %}
+
+<section class="detail-hero">
+  <div class="container">
+    <span class="eyebrow" data-aos="fade-up">Deep dives</span>
+    <h1 class="detail-hero__title" data-aos="fade-up" data-aos-delay="100">
+      The thinking behind<br>the <em>screens</em></h1>
+    <p class="detail-hero__summary" data-aos="fade-up" data-aos-delay="160">
+      Full UX process write-ups: research, user flows, journey maps, design decisions and measurable outcomes.</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top:1rem">
+  <div class="container">
+    <div class="grid grid--2">
+      {% for cs in case_studies %}
+      <a href="{{ cs.get_absolute_url }}" class="project-card" data-cursor="view" data-aos="fade-up">
+        <div class="project-card__media">
+          <span class="project-card__tag">Case study</span>
+          {% if cs.cover %}
+            <img src="{{ cs.cover.url }}" alt="{{ cs.title }} cover" loading="lazy">
+          {% else %}
+            <div class="project-card__ph">
+              <span>{{ cs.title|slice:":2"|upper }}</span>
+            </div>
+          {% endif %}
+        </div>
+        <div class="project-card__body">
+          <div class="project-card__meta"><span>{{ cs.year }}</span><i></i><span>UX case study</span></div>
+          <h3 class="project-card__title">{{ cs.title }}</h3>
+          <p class="project-card__summary">{{ cs.summary }}</p>
+        </div>
+      </a>
+      {% empty %}
+      <p class="section-lede">Case studies are being written up — check back soon.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}

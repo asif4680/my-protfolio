@@ -1,0 +1,16 @@
+<div class="t-card">
+  <div class="t-card__stars" aria-label="{{ t.rating }} out of 5 stars">
+    {% for _ in "12345"|slice:t.rating %}
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z"/></svg>
+    {% endfor %}
+  </div>
+  <p class="t-card__quote">"{{ t.quote }}"</p>
+  <div class="t-card__person">
+    {% if t.avatar %}
+      <img class="t-card__avatar" src="{{ t.avatar.url }}" alt="{{ t.name }}" loading="lazy">
+    {% else %}
+      <span class="t-card__avatar">{{ t.name|slice:":1" }}</span>
+    {% endif %}
+    <div class="t-card__who"><b>{{ t.name }}</b><span>{{ t.role }}</span></div>
+  </div>
+</div>

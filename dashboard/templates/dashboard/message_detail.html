@@ -1,0 +1,24 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Message from {{ msg.name }} — Control Center{% endblock %}
+{% block page_title %}Message{% endblock %}
+{% block content %}
+
+<a href="{% url 'dashboard:message_list' %}" class="back-link">&larr; Back to messages</a>
+
+<div class="dash-card form-card">
+  <div class="message-meta">
+    <div><b style="color:var(--ink)">{{ msg.name }}</b> &lt;<a href="mailto:{{ msg.email }}" style="color:var(--accent)">{{ msg.email }}</a>&gt;</div>
+    <div>{{ msg.subject|default:"No subject" }} — {{ msg.created_at|date:"M j, Y g:i A" }}</div>
+  </div>
+  <div class="message-detail">{{ msg.message }}</div>
+
+  <div class="form-actions" style="margin-top:1.6rem">
+    <a href="mailto:{{ msg.email }}" class="btn btn--primary">Reply by email</a>
+    <form method="post" action="{% url 'dashboard:message_delete' msg.pk %}">
+      {% csrf_token %}
+      <button type="submit" class="btn btn--danger" onclick="return confirm('Delete this message?')">Delete</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

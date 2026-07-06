@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}{{ cs.title }} — {{ site.site_name }}{% endblock %}
+{% block meta_description %}{{ cs.summary }}{% endblock %}
+{% block content %}
+
+<section class="detail-hero">
+  <div class="container">
+    <span class="eyebrow" data-aos="fade-up">Case study · {{ cs.year }}</span>
+    <h1 class="detail-hero__title" data-aos="fade-up" data-aos-delay="80">{{ cs.title }}</h1>
+    {% if cs.subtitle %}<p class="detail-hero__summary" data-aos="fade-up" data-aos-delay="140">{{ cs.subtitle }}</p>{% endif %}
+  </div>
+</section>
+
+<div class="container" data-aos="zoom-in-up">
+  <div class="detail-cover">
+    {% if cs.cover %}
+      <img src="{{ cs.cover.url }}" alt="{{ cs.title }} cover" data-parallax="-8">
+    {% else %}
+      <div class="project-card__ph">
+        <span>{{ cs.title }}</span>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="article">
+      <div class="article__section" data-aos="fade-up">
+        <h2>Summary</h2>
+        <p>{{ cs.summary }}</p>
+      </div>
+      {% for label, body in cs.sections %}
+      <div class="article__section" data-aos="fade-up">
+        <h2>{{ label }}</h2>
+        <p>{{ body }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    <a href="{% url 'case_studies' %}" class="next-project" data-cursor="view" data-aos="fade-up">
+      <small>Keep reading</small>
+      <h3>All case studies <span class="arrow">→</span></h3>
+    </a>
+  </div>
+</section>
+
+{% endblock %}

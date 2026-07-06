@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Skills & services — {{ site.site_name }}{% endblock %}
+{% block content %}
+
+<section class="detail-hero">
+  <div class="container">
+    <span class="eyebrow" data-aos="fade-up">Capabilities</span>
+    <h1 class="detail-hero__title" data-aos="fade-up" data-aos-delay="100">
+      Skills, tools, and<br><em>what I can do for you</em></h1>
+  </div>
+</section>
+
+<section class="section" style="padding-top:1rem">
+  <div class="container">
+    <div class="grid grid--3">
+      {% for cat in skill_categories %}
+      <div class="tile" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}00">
+        <h3>{{ cat.name }}</h3>
+        <div>
+          {% for skill in cat.skills.all %}
+          <div class="skill-row">
+            <div class="skill-row__top"><b>{{ skill.name }}</b></div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section section--fog">
+  <div class="container">
+    <div class="section-head" data-aos="fade-up">
+      <span class="eyebrow">Services</span>
+      <h2 class="section-title">Ways we can work together</h2>
+      <p class="section-lede">From a single landing page to a full design system — scoped clearly, delivered carefully.</p>
+    </div>
+    <div class="grid grid--4">
+      {% for service in services %}
+      <div class="tile" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:'1' }}0">
+        <span class="tile__icon">{% include "partials/icons.html" with key=service.icon %}</span>
+        <h3>{{ service.title }}</h3>
+        <p>{{ service.description }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    <div style="margin-top:3rem;text-align:center" data-aos="fade-up">
+      <a href="{% url 'contact' %}" class="btn btn--primary btn--lg magnetic" data-cursor="hover">
+        Discuss your project <span class="arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
