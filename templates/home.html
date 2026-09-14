@@ -152,6 +152,142 @@
       font-size: 1.45rem !important;
     }
   }
+
+  /* ==================================================== SKILLS RESPONSIVE ALIGNMENT */
+  .skills-groups {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2.5rem !important;
+    width: 100% !important;
+  }
+  .skills-group {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1.25rem !important;
+    width: 100% !important;
+  }
+  .skills-group__head {
+    display: flex !important;
+    align-items: center !important;
+    gap: 1rem !important;
+  }
+  .skills-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 1rem !important;
+    width: 100% !important;
+    align-items: stretch !important;
+  }
+  .skill-card {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    min-height: 52px !important;
+    padding: 0.85rem 1.25rem !important;
+    background: rgba(18, 18, 24, 0.82) !important;
+    border: 1px solid rgba(255, 255, 255, 0.09) !important;
+    border-radius: var(--r-sm) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45) !important;
+    transition: border-color 0.25s, box-shadow 0.25s, background 0.25s !important;
+    box-sizing: border-box !important;
+    position: relative !important;
+    cursor: grab !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    touch-action: none !important;
+  }
+  .skill-card__main {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+  .skill-card__dot {
+    width: 8px !important;
+    height: 8px !important;
+    border-radius: 50% !important;
+    background: var(--accent) !important;
+    box-shadow: 0 0 10px rgba(255, 90, 31, 0.9) !important;
+    flex-shrink: 0 !important;
+  }
+  .skill-card__name {
+    font-family: var(--font-display) !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    color: var(--ink) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    pointer-events: none !important;
+  }
+  .skill-card__grip {
+    color: rgba(255, 255, 255, 0.28) !important;
+    font-size: 1rem !important;
+    flex-shrink: 0 !important;
+    margin-left: 0.5rem !important;
+    transition: color 0.2s !important;
+    pointer-events: none !important;
+  }
+  .skill-card:hover {
+    background: rgba(28, 20, 18, 0.94) !important;
+    border-color: rgba(255, 90, 31, 0.6) !important;
+    box-shadow: 0 12px 28px rgba(255, 90, 31, 0.22), 0 4px 14px rgba(0, 0, 0, 0.7) !important;
+  }
+  .skill-card:hover .skill-card__grip {
+    color: var(--accent) !important;
+  }
+
+  @media (max-width: 1024px) {
+    .skills-grid {
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 0.85rem !important;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .skills-grid {
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 0.75rem !important;
+    }
+    .skill-card {
+      padding: 0.75rem 1rem !important;
+      min-height: 48px !important;
+    }
+    .skill-card__name {
+      font-size: 0.88rem !important;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .skills-grid {
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 0.65rem !important;
+    }
+    .skill-card {
+      padding: 0.7rem 0.8rem !important;
+      min-height: 46px !important;
+    }
+    .skill-card__main {
+      gap: 0.5rem !important;
+    }
+    .skill-card__name {
+      font-size: 0.82rem !important;
+    }
+    .skill-card__grip {
+      font-size: 0.85rem !important;
+      margin-left: 0.25rem !important;
+    }
+  }
+
+  @media (max-width: 320px) {
+    .skills-grid {
+      grid-template-columns: 1fr !important;
+    }
+  }
 </style>
 {% endblock %}
 
@@ -219,8 +355,10 @@
           <div class="skills-grid">
             {% for skill in cat.skills.all %}
             <div class="skill-card draggable-skill" data-cursor="grab" title="Drag me!">
-              <span class="skill-card__dot"></span>
-              <span class="skill-card__name">{{ skill.name }}</span>
+              <div class="skill-card__main">
+                <span class="skill-card__dot"></span>
+                <span class="skill-card__name">{{ skill.name }}</span>
+              </div>
               <span class="skill-card__grip" aria-hidden="true">⠿</span>
             </div>
             {% endfor %}
