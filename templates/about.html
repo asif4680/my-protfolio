@@ -97,12 +97,18 @@
     </div>
     <div class="grid grid--3">
       {% for cert in certifications %}
-      <div class="tile" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}0">
-        <h3>{{ cert.title }}</h3>
-        <p>{{ cert.issuer }} — {{ cert.date }}</p>
+      <div class="tile cert-card" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}0">
+        <div class="cert-card__icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="8" r="6"></circle>
+            <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"></path>
+          </svg>
+        </div>
+        <h3 style="font-size:1.15rem;margin-bottom:.35rem">{{ cert.title }}</h3>
+        <p style="color:var(--graphite);font-size:.92rem">{{ cert.issuer }} — {{ cert.date }}</p>
         {% if cert.credential_url %}
-        <a class="link-arrow" style="margin-top:1rem" href="{{ cert.credential_url }}" target="_blank" rel="noopener" data-cursor="hover">
-          Verify <span class="arrow">→</span></a>
+        <a class="link-arrow" style="margin-top:1rem;font-size:.88rem" href="{{ cert.credential_url }}" target="_blank" rel="noopener" data-cursor="hover">
+          Verify credential <span class="arrow">→</span></a>
         {% endif %}
       </div>
       {% endfor %}

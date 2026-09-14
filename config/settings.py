@@ -17,7 +17,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "core",
-    "dashboard",
+    "crm",
 ]
 
 MIDDLEWARE = [
@@ -44,7 +44,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "core.context_processors.site_globals",
-                "dashboard.context_processors.sidebar_counts",
+                "crm.context_processors.sidebar_counts",
             ],
         },
     },
@@ -80,8 +80,11 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# Hidden CMS path — never linked from the public site
-CMS_URL_PREFIX = "dashboard/asif/"
+# Hidden CMS / CRM path — never linked from the public site
+CMS_URL_PREFIX = "crm/asif/"
 
 LOGIN_URL = f"/{CMS_URL_PREFIX}login/"
 LOGIN_REDIRECT_URL = f"/{CMS_URL_PREFIX}"
+
+# Allow iframe embedding for local previews
+X_FRAME_OPTIONS = "ALLOWALL"

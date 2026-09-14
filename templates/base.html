@@ -23,10 +23,18 @@
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.1.14/swiper-bundle.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
-  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  <link rel="stylesheet" href="{% static 'css/main.css' %}?v=8.0">
   {% block extra_head %}{% endblock %}
 </head>
 <body>
+
+  <!-- Continuous ambient orange and black gradient glow across all pages -->
+  <div class="bg-ambient" aria-hidden="true">
+    <div class="bg-ambient__orb bg-ambient__orb--1"></div>
+    <div class="bg-ambient__orb bg-ambient__orb--2"></div>
+    <div class="bg-ambient__orb bg-ambient__orb--3"></div>
+    <div class="bg-ambient__orb bg-ambient__orb--4"></div>
+  </div>
 
   <!-- Preloader: only plays once per browser session, on first entry -->
   <div class="preloader" id="preloader" aria-hidden="true">
@@ -55,11 +63,8 @@
       </a>
       <ul class="nav__links" id="navLinks">
         <li><a href="{% url 'home' %}" data-cursor="hover">Home</a></li>
-        <li><a href="{% url 'home' %}#about" data-cursor="hover">About</a></li>
-        <li><a href="{% url 'home' %}#skills" data-cursor="hover">Skills</a></li>
         <li><a href="{% url 'home' %}#projects" data-cursor="hover">Projects</a></li>
         <li><a href="{% url 'home' %}#experience" data-cursor="hover">Experience</a></li>
-        <li><a href="{% url 'home' %}#education" data-cursor="hover">Education</a></li>
         <li><a href="{% url 'home' %}#certifications" data-cursor="hover">Certifications</a></li>
         <li><a href="{% url 'home' %}#resume" data-cursor="hover">Resume</a></li>
       </ul>
@@ -76,11 +81,8 @@
   <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
     <nav aria-label="Mobile">
       <a href="{% url 'home' %}">Home</a>
-      <a href="{% url 'home' %}#about">About</a>
-      <a href="{% url 'home' %}#skills">Skills</a>
       <a href="{% url 'home' %}#projects">Projects</a>
       <a href="{% url 'home' %}#experience">Experience</a>
-      <a href="{% url 'home' %}#education">Education</a>
       <a href="{% url 'home' %}#certifications">Certifications</a>
       <a href="{% url 'home' %}#resume">Resume</a>
     </nav>

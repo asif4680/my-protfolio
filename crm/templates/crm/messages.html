@@ -1,4 +1,4 @@
-{% extends "dashboard/base.html" %}
+{% extends "crm/base.html" %}
 {% block title %}Messages — Control Center{% endblock %}
 {% block page_title %}Messages{% endblock %}
 {% block content %}
@@ -6,7 +6,7 @@
 {% if messages_list %}
 <div class="list-rows">
   {% for msg in messages_list %}
-  <a href="{% url 'dashboard:message_detail' msg.pk %}" class="list-row message-row {% if not msg.is_read %}is-unread{% endif %}">
+  <a href="{% url 'crm:message_detail' msg.pk %}" class="list-row message-row {% if not msg.is_read %}is-unread{% endif %}">
     <div class="list-row__body">
       <div class="list-row__title">
         {{ msg.name }} &lt;{{ msg.email }}&gt;

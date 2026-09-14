@@ -1,11 +1,11 @@
-{% extends "dashboard/base.html" %}
+{% extends "crm/base.html" %}
 {% block title %}Skills — Control Center{% endblock %}
 {% block page_title %}Skills{% endblock %}
 {% block content %}
 
 <div class="page-head">
   <h2>Skill categories</h2>
-  <a href="{% url 'dashboard:skill_category_add' %}" class="btn btn--primary">
+  <a href="{% url 'crm:skill_category_add' %}" class="btn btn--primary">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
     Add category
   </a>
@@ -17,13 +17,13 @@
   <div class="skill-group__head">
     <h3>{{ category.name }}{% if not category.is_active %} <span class="tag">Hidden</span>{% endif %}</h3>
     <div class="skill-group__actions">
-      <a href="{% url 'dashboard:skill_add' category.pk %}" class="icon-btn" title="Add skill">
+      <a href="{% url 'crm:skill_add' category.pk %}" class="icon-btn" title="Add skill">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
       </a>
-      <a href="{% url 'dashboard:skill_category_edit' category.pk %}" class="icon-btn" title="Edit category">
+      <a href="{% url 'crm:skill_category_edit' category.pk %}" class="icon-btn" title="Edit category">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
       </a>
-      <a href="{% url 'dashboard:skill_category_delete' category.pk %}" class="icon-btn icon-btn--danger" title="Delete category">
+      <a href="{% url 'crm:skill_category_delete' category.pk %}" class="icon-btn icon-btn--danger" title="Delete category">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0l-1 14a2 2 0 01-2 2H7a2 2 0 01-2-2L4 6"/></svg>
       </a>
     </div>
@@ -34,10 +34,10 @@
     {% for skill in category.skills.all %}
     <div class="skill-chip">
       <b>{{ skill.name }}</b>
-      <a href="{% url 'dashboard:skill_edit' skill.pk %}" class="icon-btn" style="width:24px;height:24px" title="Edit skill">
+      <a href="{% url 'crm:skill_edit' skill.pk %}" class="icon-btn" style="width:24px;height:24px" title="Edit skill">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
       </a>
-      <a href="{% url 'dashboard:skill_delete' skill.pk %}" class="icon-btn icon-btn--danger" style="width:24px;height:24px" title="Delete skill">
+      <a href="{% url 'crm:skill_delete' skill.pk %}" class="icon-btn icon-btn--danger" style="width:24px;height:24px" title="Delete skill">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 6L6 18M6 6l12 12"/></svg>
       </a>
     </div>

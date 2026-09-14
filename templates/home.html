@@ -1,14 +1,165 @@
 {% extends "base.html" %}
+
+{% block extra_head %}
+<style>
+  .hero {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+  .hero__inner {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    margin-inline: auto !important;
+    width: 100% !important;
+    max-width: 1100px !important;
+    gap: 2rem !important;
+  }
+  .hero__title {
+    font-size: clamp(2.2rem, 5.5vw, 4.8rem) !important;
+    line-height: 1.12 !important;
+    text-align: center !important;
+    margin-inline: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    letter-spacing: -0.02em !important;
+  }
+  .hero__title .line {
+    display: block !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+  }
+  .hero__title .line > span {
+    display: inline-block !important;
+    text-align: center !important;
+  }
+  .hero__typed-row {
+    text-align: center !important;
+    margin-inline: auto !important;
+    width: 100% !important;
+    font-size: clamp(1.15rem, 2.5vw, 1.65rem) !important;
+  }
+  .hero__statement {
+    text-align: center !important;
+    margin-inline: auto !important;
+    max-width: 580px !important;
+    font-size: clamp(1rem, 2vw, 1.15rem) !important;
+    line-height: 1.65 !important;
+  }
+  .hero__ctas {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 1.25rem !important;
+    margin-inline: auto !important;
+    width: 100% !important;
+  }
+  .hero__ctas .btn {
+    min-width: 160px !important;
+    justify-content: center !important;
+  }
+  .hero__stats {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: clamp(1rem, 3vw, 3rem) !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    margin-inline: auto !important;
+    width: 100% !important;
+    max-width: 640px !important;
+    border-top: 1px solid var(--line) !important;
+    padding-top: 2rem !important;
+  }
+  .stat {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+  .stat__num {
+    display: inline-flex !important;
+    align-items: baseline !important;
+    justify-content: center !important;
+    text-align: center !important;
+    font-size: clamp(1.6rem, 3vw, 2.4rem) !important;
+  }
+  .stat__label {
+    text-align: center !important;
+  }
+
+  /* Responsive Mobile Adjustments */
+  @media (max-width: 640px) {
+    .hero {
+      padding-top: calc(var(--header-h) + 1.2rem) !important;
+      padding-bottom: 2.5rem !important;
+      min-height: auto !important;
+    }
+    .hero__inner {
+      gap: 1.35rem !important;
+      padding-inline: 0.85rem !important;
+    }
+    .hero__title {
+      font-size: clamp(1.65rem, 7.8vw, 2.35rem) !important;
+      line-height: 1.15 !important;
+      margin-bottom: 0.2rem !important;
+    }
+    .hero__typed-row {
+      font-size: 1.1rem !important;
+      min-height: 1.6rem !important;
+    }
+    .hero__statement {
+      font-size: 0.96rem !important;
+      line-height: 1.55 !important;
+      padding-inline: 0.5rem !important;
+    }
+    /* CTA into 2 lines */
+    .hero__ctas {
+      flex-direction: column !important;
+      gap: 0.8rem !important;
+      width: 100% !important;
+      max-width: 280px !important;
+    }
+    .hero__ctas .btn {
+      width: 100% !important;
+      min-width: 100% !important;
+      justify-content: center !important;
+      padding: 0.9rem 1.4rem !important;
+      font-size: 0.9rem !important;
+    }
+    .hero__stats {
+      gap: 0.5rem !important;
+      padding-top: 1.4rem !important;
+      max-width: 360px !important;
+    }
+    .stat__num {
+      font-size: 1.5rem !important;
+    }
+    .stat__label {
+      font-size: 0.65rem !important;
+      letter-spacing: 0.04em !important;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .hero__title {
+      font-size: 1.45rem !important;
+    }
+  }
+</style>
+{% endblock %}
+
 {% block content %}
 
 <!-- ============================================================ HERO -->
 <section class="hero">
-  <div class="hero__orb hero__orb--a" data-parallax="-18"></div>
-  <div class="hero__orb hero__orb--b" data-parallax="10"></div>
   <div class="container hero__inner">
-    <div class="hero__eyebrow-wrap" data-intro>
-      <span class="hero__status">Available for new projects</span>
-    </div>
     <h1 class="hero__title">
       <span class="line"><span>{{ hero.headline_line1 }}</span></span>
       <span class="line"><span><em>{{ hero.headline_line2 }}</em></span></span>
@@ -32,23 +183,51 @@
         <span class="stat__label">Happy clients</span></div>
     </div>
   </div>
-  <span class="hero__scroll">Scroll</span>
 </section>
 
-<!-- ============================================================ ABOUT -->
+<!-- ============================================================ ABOUT & SKILLS -->
 <section class="section" id="about">
-  <div class="container split">
-    <div class="portrait-frame" data-aos="fade-right">
-      {% if about.portrait %}
-        <img src="{{ about.portrait.url }}" alt="Portrait of {{ site.site_name }}" data-parallax="-8" loading="lazy">
-      {% else %}
-        <span class="portrait-frame__ph">{{ site.logo_text }}</span>
-      {% endif %}
+  <div class="container">
+    <div class="split" style="align-items:center;gap:3.5rem">
+      <div class="portrait-frame" data-aos="fade-right">
+        {% if about.portrait %}
+          <img src="{{ about.portrait.url }}" alt="Portrait of {{ site.site_name }}" data-parallax="-8" loading="lazy">
+        {% else %}
+          <span class="portrait-frame__ph">{{ site.logo_text }}</span>
+        {% endif %}
+      </div>
+      <div data-aos="fade-left">
+        <span class="eyebrow">About me</span>
+        <h2 class="section-title" style="margin-top:.6rem">Designer by discipline,<br><em>developer by craft</em></h2>
+        <p class="big-quote" style="margin-top:.85rem">{{ about.intro }}</p>
+        <p class="section-lede" style="margin-top:1.2rem">{{ about.philosophy }}</p>
+      </div>
     </div>
-    <div data-aos="fade-left">
-      <span class="eyebrow">About me</span>
-      <p class="big-quote" style="margin-top:.85rem">{{ about.intro }}</p>
-      <p class="section-lede" style="margin-top:1.6rem">{{ about.philosophy }}</p>
+
+    <!-- Integrated Capabilities / Skills -->
+    <div style="margin-top:4rem" id="skills">
+      <div class="section-head" data-aos="fade-up" style="margin-bottom:2rem">
+        <span class="eyebrow">Capabilities & Toolkit</span>
+        <h3 class="section-title" style="font-size:clamp(1.75rem,3.2vw,2.4rem)">Core Competencies</h3>
+      </div>
+      <div class="skills-groups">
+        {% for cat in skill_categories %}
+        <div class="skills-group" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}00">
+          <div class="skills-group__head">
+            <span class="skills-group__tag">{{ cat.name }}</span>
+          </div>
+          <div class="skills-grid">
+            {% for skill in cat.skills.all %}
+            <div class="skill-card draggable-skill" data-cursor="grab" title="Drag me!">
+              <span class="skill-card__dot"></span>
+              <span class="skill-card__name">{{ skill.name }}</span>
+              <span class="skill-card__grip" aria-hidden="true">⠿</span>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
     </div>
   </div>
 </section>
@@ -63,37 +242,13 @@
   </div>
 </div>
 
-<!-- ==================================================== SKILLS -->
-<section class="section" id="skills">
-  <div class="container">
-    <div class="section-head" data-aos="fade-up">
-      <span class="eyebrow">Capabilities</span>
-      <h2 class="section-title">Design first,<br>built to ship</h2>
-    </div>
-    <div class="grid grid--3">
-      {% for cat in skill_categories %}
-      <div class="tile" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}00">
-        <h3>{{ cat.name }}</h3>
-        <div>
-          {% for skill in cat.skills.all %}
-          <div class="skill-row">
-            <div class="skill-row__top"><b>{{ skill.name }}</b></div>
-          </div>
-          {% endfor %}
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-</section>
-
-
 <!-- ==================================================== PROJECTS -->
 <section class="section" id="projects">
   <div class="container">
     <div class="section-head" data-aos="fade-up">
       <span class="eyebrow">Selected work</span>
-      <h2 class="section-title">Projects</h2>
+      <h2 class="section-title">Featured Projects</h2>
+      <p class="section-lede">A collection of research-driven products, design systems, and responsive web applications.</p>
     </div>
     <div class="grid grid--2">
       {% for project in featured_projects %}
@@ -102,48 +257,58 @@
         <p class="section-lede">Projects are on their way. Check back soon.</p>
       {% endfor %}
     </div>
-    <div style="margin-top:2.6rem" data-aos="fade-up">
+    <div style="margin-top:2.6rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem" data-aos="fade-up">
       <a href="{% url 'projects' %}" class="link-arrow" data-cursor="hover">Browse all projects <span class="arrow">→</span></a>
+      <a href="#experience" class="link-arrow" style="color:var(--graphite)" data-cursor="hover">View work experience & credentials <span class="arrow">↓</span></a>
     </div>
   </div>
 </section>
 
-<!-- ==================================================== EXPERIENCE -->
-<section class="section section--fog" id="experience">
+<!-- ==================================================== EXPERIENCE & EDUCATION -->
+<section class="section" id="experience">
   <div class="container">
     <div class="section-head" data-aos="fade-up">
-      <span class="eyebrow">Career</span>
-      <h2 class="section-title">Experience</h2>
+      <span class="eyebrow">Career & Learning</span>
+      <h2 class="section-title">Experience & Education</h2>
+      <p class="section-lede">My professional journey and academic background.</p>
     </div>
-    <div class="timeline">
-      {% for item in experience %}
-      <div class="timeline__item">
-        <span class="timeline__period">{{ item.period }}</span>
-        <h3 class="timeline__title">{{ item.title }}</h3>
-        <p class="timeline__org">{{ item.org }}</p>
-        {% if item.description %}<p class="timeline__desc">{{ item.description }}</p>{% endif %}
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-</section>
 
-<!-- ==================================================== EDUCATION -->
-<section class="section" id="education">
-  <div class="container">
-    <div class="section-head" data-aos="fade-up">
-      <span class="eyebrow">Learning</span>
-      <h2 class="section-title">Education</h2>
-    </div>
-    <div class="timeline">
-      {% for item in education %}
-      <div class="timeline__item">
-        <span class="timeline__period">{{ item.period }}</span>
-        <h3 class="timeline__title">{{ item.title }}</h3>
-        <p class="timeline__org">{{ item.org }}</p>
-        {% if item.description %}<p class="timeline__desc">{{ item.description }}</p>{% endif %}
+    <div class="grid grid--2" style="gap:3.5rem;align-items:start">
+      <!-- Work Experience Column -->
+      <div data-aos="fade-right">
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.8rem">
+          <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--accent)"></span>
+          <h3 style="font-size:1.4rem">Work Experience</h3>
+        </div>
+        <div class="timeline">
+          {% for item in experience %}
+          <div class="timeline__item">
+            <span class="timeline__period">{{ item.period }}</span>
+            <h3 class="timeline__title">{{ item.title }}</h3>
+            <p class="timeline__org">{{ item.org }}</p>
+            {% if item.description %}<p class="timeline__desc">{{ item.description }}</p>{% endif %}
+          </div>
+          {% endfor %}
+        </div>
       </div>
-      {% endfor %}
+
+      <!-- Education Column -->
+      <div data-aos="fade-left">
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.8rem">
+          <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--accent)"></span>
+          <h3 style="font-size:1.4rem">Education</h3>
+        </div>
+        <div class="timeline">
+          {% for item in education %}
+          <div class="timeline__item">
+            <span class="timeline__period">{{ item.period }}</span>
+            <h3 class="timeline__title">{{ item.title }}</h3>
+            <p class="timeline__org">{{ item.org }}</p>
+            {% if item.description %}<p class="timeline__desc">{{ item.description }}</p>{% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -153,17 +318,24 @@
 <section class="section" id="certifications">
   <div class="container">
     <div class="section-head" data-aos="fade-up">
-      <span class="eyebrow">Credentials</span>
+      <span class="eyebrow">Credentials & Badges</span>
       <h2 class="section-title">Certifications</h2>
+      <p class="section-lede">Industry-recognized professional certifications and specialized design credentials.</p>
     </div>
     <div class="grid grid--3">
       {% for cert in certifications %}
-      <div class="tile" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}0">
-        <h3>{{ cert.title }}</h3>
-        <p>{{ cert.issuer }} — {{ cert.date }}</p>
+      <div class="tile cert-card" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}0">
+        <div class="cert-card__icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="8" r="6"></circle>
+            <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"></path>
+          </svg>
+        </div>
+        <h3 style="font-size:1.15rem;margin-bottom:.35rem">{{ cert.title }}</h3>
+        <p style="color:var(--graphite);font-size:.92rem">{{ cert.issuer }} — {{ cert.date }}</p>
         {% if cert.credential_url %}
-        <a class="link-arrow" style="margin-top:1rem" href="{{ cert.credential_url }}" target="_blank" rel="noopener" data-cursor="hover">
-          Verify <span class="arrow">→</span></a>
+        <a class="link-arrow" style="margin-top:1rem;font-size:.88rem" href="{{ cert.credential_url }}" target="_blank" rel="noopener" data-cursor="hover">
+          Verify credential <span class="arrow">→</span></a>
         {% endif %}
       </div>
       {% endfor %}
@@ -213,5 +385,55 @@
     </div>
   </div>
 </section>
+
+<script>
+  (function() {
+    let highestZIndex = 40;
+
+    document.querySelectorAll('.draggable-skill').forEach(function(card) {
+      let isDragging = false;
+      let startX = 0, startY = 0;
+      let currentX = 0, currentY = 0;
+      let initialX = 0, initialY = 0;
+
+      card.addEventListener('pointerdown', function(e) {
+        if (e.button !== 0) return;
+        isDragging = true;
+        card.classList.add('is-dragging');
+        highestZIndex++;
+        card.style.zIndex = highestZIndex;
+
+        startX = e.clientX;
+        startY = e.clientY;
+        initialX = currentX;
+        initialY = currentY;
+
+        try { card.setPointerCapture(e.pointerId); } catch(err) {}
+      });
+
+      card.addEventListener('pointermove', function(e) {
+        if (!isDragging) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        currentX = initialX + dx;
+        currentY = initialY + dy;
+
+        const tilt = Math.max(-10, Math.min(10, dx * 0.08));
+        card.style.transform = 'translate3d(' + currentX + 'px, ' + currentY + 'px, 0) scale(1.08) rotate(' + tilt + 'deg)';
+      });
+
+      function stopDrag(e) {
+        if (!isDragging) return;
+        isDragging = false;
+        card.classList.remove('is-dragging');
+        try { card.releasePointerCapture(e.pointerId); } catch(err) {}
+        card.style.transform = 'translate3d(' + currentX + 'px, ' + currentY + 'px, 0) scale(1) rotate(0deg)';
+      }
+
+      card.addEventListener('pointerup', stopDrag);
+      card.addEventListener('pointercancel', stopDrag);
+    });
+  })();
+</script>
 
 {% endblock %}

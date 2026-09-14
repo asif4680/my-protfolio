@@ -15,21 +15,21 @@ python manage.py runserver
 
 Open http://127.0.0.1:8000
 
-## Content management (hidden CMS)
+## Content management (CRM / Studio Console)
 
-The CMS is Django admin, rebranded "Studio Console" and served at a
-non-obvious URL that is never linked from the public site:
+The CRM is organized in its own dedicated `crm/` module, served at a
+secure URL that is never linked from the public site:
 
-- URL: http://127.0.0.1:8000/dashboard/asif/
-- Login: `admin` / `admin1234`  (change this immediately)
+- URL: http://127.0.0.1:8000/crm/asif/
+- Login: `asif` / `asif1234`
 
 From there you can manage: hero section, about section, projects (with all
-case-study sections + image galleries), case studies, skills, services,
-testimonials, client logos, timeline (experience/education), design process
-steps, social links, SEO settings, resume upload, and read contact-form
-messages (read-only inbox).
+case-study sections + image galleries), case studies, skills, certifications,
+services, testimonials, client logos, timeline (experience/education),
+design process steps, social links, SEO settings, resume upload, and read
+contact-form messages (read-only inbox).
 
-To move the CMS somewhere else, change `CMS_URL_PREFIX` in `config/settings.py`.
+To move the CRM somewhere else, change `CMS_URL_PREFIX` in `config/settings.py`.
 
 ## Pages
 

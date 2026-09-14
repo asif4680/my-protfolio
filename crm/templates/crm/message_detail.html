@@ -1,9 +1,9 @@
-{% extends "dashboard/base.html" %}
+{% extends "crm/base.html" %}
 {% block title %}Message from {{ msg.name }} — Control Center{% endblock %}
 {% block page_title %}Message{% endblock %}
 {% block content %}
 
-<a href="{% url 'dashboard:message_list' %}" class="back-link">&larr; Back to messages</a>
+<a href="{% url 'crm:message_list' %}" class="back-link">&larr; Back to messages</a>
 
 <div class="dash-card form-card">
   <div class="message-meta">
@@ -14,7 +14,7 @@
 
   <div class="form-actions" style="margin-top:1.6rem">
     <a href="mailto:{{ msg.email }}" class="btn btn--primary">Reply by email</a>
-    <form method="post" action="{% url 'dashboard:message_delete' msg.pk %}">
+    <form method="post" action="{% url 'crm:message_delete' msg.pk %}">
       {% csrf_token %}
       <button type="submit" class="btn btn--danger" onclick="return confirm('Delete this message?')">Delete</button>
     </form>

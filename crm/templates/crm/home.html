@@ -1,4 +1,4 @@
-{% extends "dashboard/base.html" %}
+{% extends "crm/base.html" %}
 {% block title %}Dashboard — Control Center{% endblock %}
 {% block page_title %}Control Center{% endblock %}
 {% block content %}
@@ -8,7 +8,7 @@
   <p>You've successfully logged in. Everything on your portfolio can be managed from here.</p>
   <div style="display:flex;gap:.8rem;justify-content:center">
     <a href="{% url 'home' %}" target="_blank" rel="noopener" class="btn btn--primary">Go to main site</a>
-    <form method="post" action="{% url 'dashboard:logout' %}">
+    <form method="post" action="{% url 'crm:logout' %}">
       {% csrf_token %}
       <button type="submit" class="btn btn--ghost">Logout</button>
     </form>
@@ -30,7 +30,7 @@
 <h3 class="dash-section-title">Recent messages</h3>
 <div class="list-rows">
   {% for msg in recent_messages %}
-  <a href="{% url 'dashboard:message_detail' msg.pk %}" class="list-row message-row {% if not msg.is_read %}is-unread{% endif %}">
+  <a href="{% url 'crm:message_detail' msg.pk %}" class="list-row message-row {% if not msg.is_read %}is-unread{% endif %}">
     <div class="list-row__body">
       <div class="list-row__title">{{ msg.name }} {% if not msg.is_read %}<span class="tag tag--unread">New</span>{% endif %}</div>
       <div class="list-row__sub">{{ msg.subject|default:"No subject" }} — {{ msg.created_at|date:"M j, Y" }}</div>

@@ -1,4 +1,4 @@
-{% extends "dashboard/base.html" %}
+{% extends "crm/base.html" %}
 {% block title %}Account — Control Center{% endblock %}
 {% block page_title %}Account{% endblock %}
 {% block content %}
@@ -7,7 +7,7 @@
 
   <div class="dash-card form-card">
     <h3 class="dash-section-title" style="margin-top:0">Username</h3>
-    <form method="post" action="{% url 'dashboard:username_change' %}" class="form-grid">
+    <form method="post" action="{% url 'crm:username_change' %}" class="form-grid">
       {% csrf_token %}
       <div class="field-group">
         <label for="{{ username_form.username.id_for_label }}">Username</label>
@@ -22,7 +22,7 @@
 
   <div class="dash-card form-card">
     <h3 class="dash-section-title" style="margin-top:0">Password</h3>
-    <form method="post" action="{% url 'dashboard:password_change' %}" class="form-grid">
+    <form method="post" action="{% url 'crm:password_change' %}" class="form-grid">
       {% csrf_token %}
       <div class="field-group">
         <label for="{{ password_form.old_password.id_for_label }}">Current password</label>

@@ -12,21 +12,21 @@ from . import forms
 # --------------------------------------------------------------------- auth
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect("dashboard:home")
+        return redirect("crm:home")
     form = forms.DashboardLoginForm(request, data=request.POST or None)
     if request.method == "POST" and form.is_valid():
         auth_login(request, form.get_user())
-        return redirect("dashboard:home")
-    return render(request, "dashboard/login.html", {"form": form})
+        return redirect("crm:home")
+    return render(request, "crm/login.html", {"form": form})
 
 
 def logout_view(request):
     auth_logout(request)
-    return redirect("dashboard:login")
+    return redirect("crm:login")
 
 
 class StaffRequired(LoginRequiredMixin, UserPassesTestMixin):
-    login_url = "dashboard:login"
+    login_url = "crm:login"
 
     def test_func(self):
         return self.request.user.is_staff
@@ -35,14 +35,14 @@ class StaffRequired(LoginRequiredMixin, UserPassesTestMixin):
 def staff_required_view(view_func):
     """Function-view equivalent of StaffRequired, for the simple pages below."""
     from django.contrib.auth.decorators import login_required, user_passes_test
-    return login_required(login_url="dashboard:login")(
-        user_passes_test(lambda u: u.is_staff, login_url="dashboard:login")(view_func)
+    return login_required(login_url="crm:login")(
+        user_passes_test(lambda u: u.is_staff, login_url="crm:login")(view_func)
     )
 
 
 @staff_required_view
 def account_settings(request):
-    return render(request, "dashboard/account.html", {
+    return render(request, "crm/account.html", {
         "username_form": forms.UsernameChangeForm(instance=request.user),
         "password_form": forms.DashboardPasswordChangeForm(request.user),
         "active": "account",
@@ -55,8 +55,8 @@ def username_change(request):
     if request.method == "POST" and username_form.is_valid():
         username_form.save()
         flash.success(request, "Username updated.")
-        return redirect("dashboard:account")
-    return render(request, "dashboard/account.html", {
+        return redirect("crm:account")
+    return render(request, "crm/account.html", {
         "username_form": username_form,
         "password_form": forms.DashboardPasswordChangeForm(request.user),
         "active": "account",
@@ -70,8 +70,8 @@ def password_change(request):
         user = password_form.save()
         update_session_auth_hash(request, user)
         flash.success(request, "Password updated.")
-        return redirect("dashboard:account")
-    return render(request, "dashboard/account.html", {
+        return redirect("crm:account")
+    return render(request, "crm/account.html", {
         "username_form": forms.UsernameChangeForm(instance=request.user),
         "password_form": password_form,
         "active": "account",
@@ -81,7 +81,7 @@ def password_change(request):
 # ------------------------------------------------------------------- home
 @staff_required_view
 def home(request):
-    return render(request, "dashboard/home.html", {
+    return render(request, "crm/home.html", {
         "counts": {
             "projects": m.Project.objects.count(),
             "skills": m.Skill.objects.count(),
@@ -110,8 +110,8 @@ def profile_edit(request):
             about_form.save()
             hero_form.save()
             flash.success(request, "Profile & bio updated.")
-            return redirect("dashboard:profile")
-    return render(request, "dashboard/profile.html", {
+            return redirect("crm:profile")
+    return render(request, "crm/profile.html", {
         "about_form": about_form, "hero_form": hero_form, "active": "profile",
     })
 
@@ -123,8 +123,8 @@ def resume_edit(request):
     if request.method == "POST" and form.is_valid():
         form.save()
         flash.success(request, "Resume updated.")
-        return redirect("dashboard:resume")
-    return render(request, "dashboard/resume.html", {"form": form, "site": site, "active": "resume"})
+        return redirect("crm:resume")
+    return render(request, "crm/resume.html", {"form": form, "site": site, "active": "resume"})
 
 
 @staff_required_view
@@ -134,17 +134,17 @@ def site_settings_edit(request):
     if request.method == "POST" and form.is_valid():
         form.save()
         flash.success(request, "Site settings updated.")
-        return redirect("dashboard:settings")
-    return render(request, "dashboard/form.html", {
+        return redirect("crm:settings")
+    return render(request, "crm/form.html", {
         "form": form, "title": "Site settings",
-        "back_url": "dashboard:home", "active": "settings",
+        "back_url": "crm:home", "active": "settings",
     })
 
 
 # --------------------------------------------------------------- messages
 @staff_required_view
 def message_list(request):
-    return render(request, "dashboard/messages.html", {
+    return render(request, "crm/messages.html", {
         "messages_list": m.ContactMessage.objects.all(), "active": "messages",
     })
 
@@ -155,7 +155,7 @@ def message_detail(request, pk):
     if not msg.is_read:
         msg.is_read = True
         msg.save(update_fields=["is_read"])
-    return render(request, "dashboard/message_detail.html", {"msg": msg, "active": "messages"})
+    return render(request, "crm/message_detail.html", {"msg": msg, "active": "messages"})
 
 
 @staff_required_view
@@ -164,16 +164,16 @@ def message_delete(request, pk):
     if request.method == "POST":
         msg.delete()
         flash.success(request, "Message deleted.")
-        return redirect("dashboard:message_list")
-    return render(request, "dashboard/confirm_delete.html", {
-        "object": msg, "back_url": "dashboard:message_list", "active": "messages",
+        return redirect("crm:message_list")
+    return render(request, "crm/confirm_delete.html", {
+        "object": msg, "back_url": "crm:message_list", "active": "messages",
     })
 
 
 # ------------------------------------------------------------------ skills
 @staff_required_view
 def skills_home(request):
-    return render(request, "dashboard/skills.html", {
+    return render(request, "crm/skills.html", {
         "categories": m.SkillCategory.objects.prefetch_related("skills"), "active": "skills",
     })
 
@@ -184,9 +184,9 @@ def skill_category_add(request):
     if request.method == "POST" and form.is_valid():
         form.save()
         flash.success(request, "Skill category added.")
-        return redirect("dashboard:skills")
-    return render(request, "dashboard/form.html", {
-        "form": form, "title": "Add skill category", "back_url": "dashboard:skills", "active": "skills",
+        return redirect("crm:skills")
+    return render(request, "crm/form.html", {
+        "form": form, "title": "Add skill category", "back_url": "crm:skills", "active": "skills",
     })
 
 
@@ -197,9 +197,9 @@ def skill_category_edit(request, pk):
     if request.method == "POST" and form.is_valid():
         form.save()
         flash.success(request, "Skill category updated.")
-        return redirect("dashboard:skills")
-    return render(request, "dashboard/form.html", {
-        "form": form, "title": "Edit skill category", "back_url": "dashboard:skills", "active": "skills",
+        return redirect("crm:skills")
+    return render(request, "crm/form.html", {
+        "form": form, "title": "Edit skill category", "back_url": "crm:skills", "active": "skills",
     })
 
 
@@ -209,9 +209,9 @@ def skill_category_delete(request, pk):
     if request.method == "POST":
         obj.delete()
         flash.success(request, "Skill category deleted.")
-        return redirect("dashboard:skills")
-    return render(request, "dashboard/confirm_delete.html", {
-        "object": obj, "back_url": "dashboard:skills", "active": "skills",
+        return redirect("crm:skills")
+    return render(request, "crm/confirm_delete.html", {
+        "object": obj, "back_url": "crm:skills", "active": "skills",
     })
 
 
@@ -224,9 +224,9 @@ def skill_add(request, category_id):
         skill.category = category
         skill.save()
         flash.success(request, "Skill added.")
-        return redirect("dashboard:skills")
-    return render(request, "dashboard/form.html", {
-        "form": form, "title": f"Add skill to {category.name}", "back_url": "dashboard:skills", "active": "skills",
+        return redirect("crm:skills")
+    return render(request, "crm/form.html", {
+        "form": form, "title": f"Add skill to {category.name}", "back_url": "crm:skills", "active": "skills",
     })
 
 
@@ -237,9 +237,9 @@ def skill_edit(request, pk):
     if request.method == "POST" and form.is_valid():
         form.save()
         flash.success(request, "Skill updated.")
-        return redirect("dashboard:skills")
-    return render(request, "dashboard/form.html", {
-        "form": form, "title": "Edit skill", "back_url": "dashboard:skills", "active": "skills",
+        return redirect("crm:skills")
+    return render(request, "crm/form.html", {
+        "form": form, "title": "Edit skill", "back_url": "crm:skills", "active": "skills",
     })
 
 
@@ -249,15 +249,15 @@ def skill_delete(request, pk):
     if request.method == "POST":
         obj.delete()
         flash.success(request, "Skill deleted.")
-        return redirect("dashboard:skills")
-    return render(request, "dashboard/confirm_delete.html", {
-        "object": obj, "back_url": "dashboard:skills", "active": "skills",
+        return redirect("crm:skills")
+    return render(request, "crm/confirm_delete.html", {
+        "object": obj, "back_url": "crm:skills", "active": "skills",
     })
 
 
 # --------------------------------------------------------- generic CRUD sets
 class SimpleListView(StaffRequired, ListView):
-    template_name = "dashboard/simple_list.html"
+    template_name = "crm/simple_list.html"
     context_object_name = "items"
 
     def get_context_data(self, **kwargs):
@@ -267,7 +267,7 @@ class SimpleListView(StaffRequired, ListView):
 
 
 class SimpleCreateView(StaffRequired, CreateView):
-    template_name = "dashboard/form.html"
+    template_name = "crm/form.html"
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -276,7 +276,7 @@ class SimpleCreateView(StaffRequired, CreateView):
 
 
 class SimpleUpdateView(StaffRequired, UpdateView):
-    template_name = "dashboard/form.html"
+    template_name = "crm/form.html"
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -285,7 +285,7 @@ class SimpleUpdateView(StaffRequired, UpdateView):
 
 
 class SimpleDeleteView(StaffRequired, DeleteView):
-    template_name = "dashboard/confirm_delete.html"
+    template_name = "crm/confirm_delete.html"
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -296,8 +296,8 @@ class SimpleDeleteView(StaffRequired, DeleteView):
 # ---- Experience (TimelineEntry, kind="work") ----
 class ExperienceListView(SimpleListView):
     model = m.TimelineEntry
-    extra = {"title": "Experience", "add_url": "dashboard:experience_add",
-             "edit_url": "dashboard:experience_edit", "delete_url": "dashboard:experience_delete", "active": "experience"}
+    extra = {"title": "Experience", "add_url": "crm:experience_add",
+             "edit_url": "crm:experience_edit", "delete_url": "crm:experience_delete", "active": "experience"}
 
     def get_queryset(self):
         return m.TimelineEntry.objects.filter(kind="work")
@@ -306,8 +306,8 @@ class ExperienceListView(SimpleListView):
 class ExperienceCreateView(SimpleCreateView):
     model = m.TimelineEntry
     form_class = forms.TimelineForm
-    success_url = reverse_lazy("dashboard:experience_list")
-    extra = {"title": "Add experience", "back_url": "dashboard:experience_list", "active": "experience"}
+    success_url = reverse_lazy("crm:experience_list")
+    extra = {"title": "Add experience", "back_url": "crm:experience_list", "active": "experience"}
 
     def form_valid(self, form):
         form.instance.kind = "work"
@@ -318,8 +318,8 @@ class ExperienceCreateView(SimpleCreateView):
 class ExperienceUpdateView(SimpleUpdateView):
     model = m.TimelineEntry
     form_class = forms.TimelineForm
-    success_url = reverse_lazy("dashboard:experience_list")
-    extra = {"title": "Edit experience", "back_url": "dashboard:experience_list", "active": "experience"}
+    success_url = reverse_lazy("crm:experience_list")
+    extra = {"title": "Edit experience", "back_url": "crm:experience_list", "active": "experience"}
 
     def get_queryset(self):
         return m.TimelineEntry.objects.filter(kind="work")
@@ -331,8 +331,8 @@ class ExperienceUpdateView(SimpleUpdateView):
 
 class ExperienceDeleteView(SimpleDeleteView):
     model = m.TimelineEntry
-    success_url = reverse_lazy("dashboard:experience_list")
-    extra = {"back_url": "dashboard:experience_list", "active": "experience"}
+    success_url = reverse_lazy("crm:experience_list")
+    extra = {"back_url": "crm:experience_list", "active": "experience"}
 
     def get_queryset(self):
         return m.TimelineEntry.objects.filter(kind="work")
@@ -346,8 +346,8 @@ class ExperienceDeleteView(SimpleDeleteView):
 # ---- Education (TimelineEntry, kind="education") ----
 class EducationListView(SimpleListView):
     model = m.TimelineEntry
-    extra = {"title": "Education", "add_url": "dashboard:education_add",
-             "edit_url": "dashboard:education_edit", "delete_url": "dashboard:education_delete", "active": "education"}
+    extra = {"title": "Education", "add_url": "crm:education_add",
+             "edit_url": "crm:education_edit", "delete_url": "crm:education_delete", "active": "education"}
 
     def get_queryset(self):
         return m.TimelineEntry.objects.filter(kind="education")
@@ -356,8 +356,8 @@ class EducationListView(SimpleListView):
 class EducationCreateView(SimpleCreateView):
     model = m.TimelineEntry
     form_class = forms.TimelineForm
-    success_url = reverse_lazy("dashboard:education_list")
-    extra = {"title": "Add education", "back_url": "dashboard:education_list", "active": "education"}
+    success_url = reverse_lazy("crm:education_list")
+    extra = {"title": "Add education", "back_url": "crm:education_list", "active": "education"}
 
     def form_valid(self, form):
         form.instance.kind = "education"
@@ -368,8 +368,8 @@ class EducationCreateView(SimpleCreateView):
 class EducationUpdateView(SimpleUpdateView):
     model = m.TimelineEntry
     form_class = forms.TimelineForm
-    success_url = reverse_lazy("dashboard:education_list")
-    extra = {"title": "Edit education", "back_url": "dashboard:education_list", "active": "education"}
+    success_url = reverse_lazy("crm:education_list")
+    extra = {"title": "Edit education", "back_url": "crm:education_list", "active": "education"}
 
     def get_queryset(self):
         return m.TimelineEntry.objects.filter(kind="education")
@@ -381,8 +381,8 @@ class EducationUpdateView(SimpleUpdateView):
 
 class EducationDeleteView(SimpleDeleteView):
     model = m.TimelineEntry
-    success_url = reverse_lazy("dashboard:education_list")
-    extra = {"back_url": "dashboard:education_list", "active": "education"}
+    success_url = reverse_lazy("crm:education_list")
+    extra = {"back_url": "crm:education_list", "active": "education"}
 
     def get_queryset(self):
         return m.TimelineEntry.objects.filter(kind="education")
@@ -396,15 +396,15 @@ class EducationDeleteView(SimpleDeleteView):
 # ---- Certifications ----
 class CertificationListView(SimpleListView):
     model = m.Certification
-    extra = {"title": "Certifications", "add_url": "dashboard:certification_add",
-             "edit_url": "dashboard:certification_edit", "delete_url": "dashboard:certification_delete", "active": "certifications"}
+    extra = {"title": "Certifications", "add_url": "crm:certification_add",
+             "edit_url": "crm:certification_edit", "delete_url": "crm:certification_delete", "active": "certifications"}
 
 
 class CertificationCreateView(SimpleCreateView):
     model = m.Certification
     form_class = forms.CertificationForm
-    success_url = reverse_lazy("dashboard:certification_list")
-    extra = {"title": "Add certification", "back_url": "dashboard:certification_list", "active": "certifications"}
+    success_url = reverse_lazy("crm:certification_list")
+    extra = {"title": "Add certification", "back_url": "crm:certification_list", "active": "certifications"}
 
     def form_valid(self, form):
         flash.success(self.request, "Certification added.")
@@ -414,8 +414,8 @@ class CertificationCreateView(SimpleCreateView):
 class CertificationUpdateView(SimpleUpdateView):
     model = m.Certification
     form_class = forms.CertificationForm
-    success_url = reverse_lazy("dashboard:certification_list")
-    extra = {"title": "Edit certification", "back_url": "dashboard:certification_list", "active": "certifications"}
+    success_url = reverse_lazy("crm:certification_list")
+    extra = {"title": "Edit certification", "back_url": "crm:certification_list", "active": "certifications"}
 
     def form_valid(self, form):
         flash.success(self.request, "Certification updated.")
@@ -424,8 +424,8 @@ class CertificationUpdateView(SimpleUpdateView):
 
 class CertificationDeleteView(SimpleDeleteView):
     model = m.Certification
-    success_url = reverse_lazy("dashboard:certification_list")
-    extra = {"back_url": "dashboard:certification_list", "active": "certifications"}
+    success_url = reverse_lazy("crm:certification_list")
+    extra = {"back_url": "crm:certification_list", "active": "certifications"}
 
     def delete(self, request, *args, **kwargs):
         resp = super().delete(request, *args, **kwargs)
@@ -436,15 +436,15 @@ class CertificationDeleteView(SimpleDeleteView):
 # ---- Testimonials ----
 class TestimonialListView(SimpleListView):
     model = m.Testimonial
-    extra = {"title": "Testimonials", "add_url": "dashboard:testimonial_add",
-             "edit_url": "dashboard:testimonial_edit", "delete_url": "dashboard:testimonial_delete", "active": "testimonials"}
+    extra = {"title": "Testimonials", "add_url": "crm:testimonial_add",
+             "edit_url": "crm:testimonial_edit", "delete_url": "crm:testimonial_delete", "active": "testimonials"}
 
 
 class TestimonialCreateView(SimpleCreateView):
     model = m.Testimonial
     form_class = forms.TestimonialForm
-    success_url = reverse_lazy("dashboard:testimonial_list")
-    extra = {"title": "Add testimonial", "back_url": "dashboard:testimonial_list", "active": "testimonials"}
+    success_url = reverse_lazy("crm:testimonial_list")
+    extra = {"title": "Add testimonial", "back_url": "crm:testimonial_list", "active": "testimonials"}
 
     def form_valid(self, form):
         flash.success(self.request, "Testimonial added.")
@@ -454,8 +454,8 @@ class TestimonialCreateView(SimpleCreateView):
 class TestimonialUpdateView(SimpleUpdateView):
     model = m.Testimonial
     form_class = forms.TestimonialForm
-    success_url = reverse_lazy("dashboard:testimonial_list")
-    extra = {"title": "Edit testimonial", "back_url": "dashboard:testimonial_list", "active": "testimonials"}
+    success_url = reverse_lazy("crm:testimonial_list")
+    extra = {"title": "Edit testimonial", "back_url": "crm:testimonial_list", "active": "testimonials"}
 
     def form_valid(self, form):
         flash.success(self.request, "Testimonial updated.")
@@ -464,8 +464,8 @@ class TestimonialUpdateView(SimpleUpdateView):
 
 class TestimonialDeleteView(SimpleDeleteView):
     model = m.Testimonial
-    success_url = reverse_lazy("dashboard:testimonial_list")
-    extra = {"back_url": "dashboard:testimonial_list", "active": "testimonials"}
+    success_url = reverse_lazy("crm:testimonial_list")
+    extra = {"back_url": "crm:testimonial_list", "active": "testimonials"}
 
     def delete(self, request, *args, **kwargs):
         resp = super().delete(request, *args, **kwargs)
@@ -476,15 +476,15 @@ class TestimonialDeleteView(SimpleDeleteView):
 # ---- Projects ----
 class ProjectListView(SimpleListView):
     model = m.Project
-    extra = {"title": "Projects", "add_url": "dashboard:project_add",
-             "edit_url": "dashboard:project_edit", "delete_url": "dashboard:project_delete", "active": "projects"}
+    extra = {"title": "Projects", "add_url": "crm:project_add",
+             "edit_url": "crm:project_edit", "delete_url": "crm:project_delete", "active": "projects"}
 
 
 class ProjectCreateView(SimpleCreateView):
     model = m.Project
     form_class = forms.ProjectForm
-    success_url = reverse_lazy("dashboard:project_list")
-    extra = {"title": "Add project", "back_url": "dashboard:project_list", "active": "projects"}
+    success_url = reverse_lazy("crm:project_list")
+    extra = {"title": "Add project", "back_url": "crm:project_list", "active": "projects"}
 
     def form_valid(self, form):
         flash.success(self.request, "Project added.")
@@ -494,8 +494,8 @@ class ProjectCreateView(SimpleCreateView):
 class ProjectUpdateView(SimpleUpdateView):
     model = m.Project
     form_class = forms.ProjectForm
-    success_url = reverse_lazy("dashboard:project_list")
-    extra = {"title": "Edit project", "back_url": "dashboard:project_list", "active": "projects"}
+    success_url = reverse_lazy("crm:project_list")
+    extra = {"title": "Edit project", "back_url": "crm:project_list", "active": "projects"}
 
     def form_valid(self, form):
         flash.success(self.request, "Project updated.")
@@ -504,8 +504,8 @@ class ProjectUpdateView(SimpleUpdateView):
 
 class ProjectDeleteView(SimpleDeleteView):
     model = m.Project
-    success_url = reverse_lazy("dashboard:project_list")
-    extra = {"back_url": "dashboard:project_list", "active": "projects"}
+    success_url = reverse_lazy("crm:project_list")
+    extra = {"back_url": "crm:project_list", "active": "projects"}
 
     def delete(self, request, *args, **kwargs):
         resp = super().delete(request, *args, **kwargs)
@@ -516,15 +516,15 @@ class ProjectDeleteView(SimpleDeleteView):
 # ---- Social links (shown inside Settings) ----
 class SocialLinkListView(SimpleListView):
     model = m.SocialLink
-    extra = {"title": "Social links", "add_url": "dashboard:social_link_add",
-             "edit_url": "dashboard:social_link_edit", "delete_url": "dashboard:social_link_delete", "active": "social"}
+    extra = {"title": "Social links", "add_url": "crm:social_link_add",
+             "edit_url": "crm:social_link_edit", "delete_url": "crm:social_link_delete", "active": "social"}
 
 
 class SocialLinkCreateView(SimpleCreateView):
     model = m.SocialLink
     form_class = forms.SocialLinkForm
-    success_url = reverse_lazy("dashboard:social_link_list")
-    extra = {"title": "Add social link", "back_url": "dashboard:social_link_list", "active": "social"}
+    success_url = reverse_lazy("crm:social_link_list")
+    extra = {"title": "Add social link", "back_url": "crm:social_link_list", "active": "social"}
 
     def form_valid(self, form):
         flash.success(self.request, "Social link added.")
@@ -534,8 +534,8 @@ class SocialLinkCreateView(SimpleCreateView):
 class SocialLinkUpdateView(SimpleUpdateView):
     model = m.SocialLink
     form_class = forms.SocialLinkForm
-    success_url = reverse_lazy("dashboard:social_link_list")
-    extra = {"title": "Edit social link", "back_url": "dashboard:social_link_list", "active": "social"}
+    success_url = reverse_lazy("crm:social_link_list")
+    extra = {"title": "Edit social link", "back_url": "crm:social_link_list", "active": "social"}
 
     def form_valid(self, form):
         flash.success(self.request, "Social link updated.")
@@ -544,8 +544,8 @@ class SocialLinkUpdateView(SimpleUpdateView):
 
 class SocialLinkDeleteView(SimpleDeleteView):
     model = m.SocialLink
-    success_url = reverse_lazy("dashboard:social_link_list")
-    extra = {"back_url": "dashboard:social_link_list", "active": "social"}
+    success_url = reverse_lazy("crm:social_link_list")
+    extra = {"back_url": "crm:social_link_list", "active": "social"}
 
     def delete(self, request, *args, **kwargs):
         resp = super().delete(request, *args, **kwargs)
