@@ -1,6 +1,8 @@
 """
 Django settings — Portfolio CMS
 """
+import os
+import shutil
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -8,6 +10,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-CHANGE-ME-IN-PRODUCTION-x9k2m4p7"
 DEBUG = True
 ALLOWED_HOSTS = ["*"]
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.vercel.app",
+    "https://*.now.sh",
+    "http://127.0.0.1",
+    "http://localhost",
+]
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -53,10 +63,25 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
+import tempfile
+
+if os.environ.get("VERCEL"):
+    tmp_dir = Path(tempfile.gettempdir())
+    tmp_db = tmp_dir / "db.sqlite3"
+    tmp_db.parent.mkdir(parents=True, exist_ok=True)
+    if not tmp_db.exists():
+        src_db = BASE_DIR / "db.sqlite3"
+        if src_db.exists():
+            shutil.copy2(src_db, tmp_db)
+    DB_PATH = tmp_db
+    SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
+else:
+    DB_PATH = BASE_DIR / "db.sqlite3"
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "NAME": DB_PATH,
     }
 }
 
