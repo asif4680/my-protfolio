@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Asif Keloth — Portfolio CRM Control Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #f5f5f4;
+      --ink-soft: #c7c7cc;
+      --paper: #08080a;
+      --fog: #111114;
+      --surface: #151517;
+      --surface-2: #1c1c1f;
+      --surface-3: #26262b;
+      --line: rgba(255, 255, 255, 0.08);
+      --line-strong: rgba(255, 255, 255, 0.16);
+      --graphite: #8f8f97;
+      --accent: #ff5a1f;
+      --accent-hover: #ff723f;
+      --accent-soft: rgba(255, 90, 31, 0.12);
+      --accent-glow: rgba(255, 90, 31, 0.28);
+      --good: #33c48d;
+      --good-soft: rgba(51, 196, 141, 0.12);
+      --bad: #ff5252;
+      --bad-soft: rgba(255, 82, 82, 0.12);
+      --blue: #3b82f6;
+      --blue-soft: rgba(59, 130, 246, 0.12);
+      --purple: #a855f7;
+      --purple-soft: rgba(168, 85, 247, 0.12);
+      --r-sm: 8px;
+      --r-md: 14px;
+      --r-lg: 20px;
+      --font-display: "Space Grotesk", sans-serif;
+      --font-body: "Poppins", sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-body);
+      background: var(--paper);
+      color: var(--ink);
+      font-size: 0.92rem;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; border: none; background: none; }
+    h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.01em; }
+    img { max-width: 100%; display: block; }
+
+    /* Layout */
+    .app { display: flex; min-height: 100vh; }
+    
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      flex-shrink: 0;
+      background: var(--fog);
+      border-right: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 30;
+      transition: transform 0.3s ease;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 1.3rem 1.2rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #ff3d00, #ff9a56);
+      display: grid;
+      place-items: center;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: #08080a;
+      box-shadow: 0 4px 14px var(--accent-glow);
+    }
+    .brand-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1rem;
+      line-height: 1.2;
+    }
+    .brand-sub {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .nav {
+      padding: 1rem 0.8rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+    .nav-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--graphite);
+      font-weight: 600;
+      padding: 0.8rem 0.6rem 0.3rem;
+    }
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.65rem 0.8rem;
+      border-radius: var(--r-sm);
+      color: var(--ink-soft);
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: all 0.18s ease;
+      width: 100%;
+      text-align: left;
+    }
+    .nav-btn svg { width: 18px; height: 18px; opacity: 0.8; transition: opacity 0.18s; flex-shrink: 0; }
+    .nav-btn:hover {
+      background: var(--surface);
+      color: var(--ink);
+    }
+    .nav-btn.is-active {
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .nav-btn.is-active svg { opacity: 1; color: var(--accent); }
+
+    .badge {
+      margin-left: auto;
+      font-size: 0.65rem;
+      font-weight: 700;
+      border-radius: 99px;
+      padding: 0.15rem 0.45rem;
+      line-height: 1;
+    }
+    .badge--accent { background: var(--accent); color: #08080a; }
+    .badge--muted { background: var(--surface-2); color: var(--graphite); border: 1px solid var(--line); }
+
+    .sidebar-footer {
+      padding: 1rem 1.2rem;
+      border-top: 1px solid var(--line);
+      background: rgba(8, 8, 10, 0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .status-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--good);
+      background: var(--good-soft);
+      border: 1px solid rgba(51, 196, 141, 0.2);
+      padding: 0.35rem 0.65rem;
+      border-radius: 99px;
+      font-weight: 600;
+    }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--good); animation: pulse 2s infinite; }
+
+    /* Main Area */
+    .main {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      background: var(--paper);
+    }
+
+    .topbar {
+      height: 64px;
+      border-bottom: 1px solid var(--line);
+      padding: 0 1.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      background: rgba(8, 8, 10, 0.85);
+      backdrop-filter: blur(12px);
+      z-index: 20;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 1rem; }
+    .topbar-title { font-size: 1.15rem; font-weight: 600; }
+    .topbar-right { display: flex; align-items: center; gap: 0.8rem; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.55rem 1.1rem;
+      border-radius: var(--r-sm);
+      font-weight: 600;
+      font-size: 0.84rem;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .btn--primary {
+      background: var(--accent);
+      color: #08080a;
+      box-shadow: 0 2px 10px var(--accent-glow);
+    }
+    .btn--primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
+    .btn--ghost {
+      background: var(--surface);
+      color: var(--ink-soft);
+      border: 1px solid var(--line);
+    }
+    .btn--ghost:hover { color: var(--ink); border-color: var(--line-strong); }
+    .btn--danger { background: var(--bad); color: white; }
+    .btn--sm { padding: 0.35rem 0.75rem; font-size: 0.78rem; }
+
+    .content-wrap {
+      padding: 2rem 2.2rem 4rem;
+      max-width: 1280px;
+      width: 100%;
+    }
+
+    /* Panels */
+    .tab-panel { display: none; }
+    .tab-panel.is-active { display: block; animation: fadeIn 0.25s ease; }
+
+    /* Cards & Grids */
+    .grid-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.1rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--r-md);
+      padding: 1.3rem 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .stat-card:hover { border-color: var(--accent-glow); transform: translateY(-2px); }
+    .stat-num {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1.1;
+    }
+    .stat-label { font-size: 0.8rem; color: var(--graphite); font-weight: 500; }
+
+    /* Welcome Card */
+    .welcome-hero {
+      background: linear-gradient(135deg, rgba(255, 90, 31, 0.12), rgba(17, 17, 20, 0.8));
+      border: 1px solid rgba(255, 90, 31, 0.25);
+      border-radius: var(--r-lg);
+      padding: 1.8rem 2.2rem;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .welcome-hero h2 { font-size: 1.5rem; color: var(--ink); margin-bottom: 0.4rem; }
+    .welcome-hero p { color: var(--ink-soft); max-width: 620px; font-size: 0.9rem; }
+
+    /* Table / List rows */
+    .card-box {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--r-lg);
+      padding: 1.6rem;
+      margin-bottom: 1.8rem;
+    }
+    .card-box-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.4rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .card-box-title { font-size: 1.15rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
+
+    .list-item {
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      border-radius: var(--r-md);
+      padding: 1rem 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      margin-bottom: 0.8rem;
+      transition: all 0.2s ease;
+    }
+    .list-item:hover { border-color: rgba(255, 255, 255, 0.2); }
+    .list-item-thumb {
+      width: 54px;
+      height: 54px;
+      border-radius: var(--r-sm);
+      object-fit: cover;
+      background: var(--surface-3);
+      flex-shrink: 0;
+      border: 1px solid var(--line);
+    }
+    .list-item-main { flex: 1; min-width: 0; }
+    .list-item-title { font-size: 0.98rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
+    .list-item-sub { font-size: 0.82rem; color: var(--graphite); margin-top: 0.15rem; }
+    .list-item-actions { display: flex; gap: 0.5rem; flex-shrink: 0; }
+
+    .pill {
+      display: inline-block;
+      padding: 0.18rem 0.55rem;
+      border-radius: 99px;
+      font-size: 0.72rem;
+      font-weight: 600;
+    }
+    .pill--featured { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
+    .pill--read { background: var(--surface-3); color: var(--graphite); }
+    .pill--unread { background: var(--accent); color: #08080a; }
+
+    /* Forms */
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-label { font-size: 0.82rem; font-weight: 600; color: var(--ink-soft); }
+    .form-input {
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      border-radius: var(--r-sm);
+      color: var(--ink);
+      padding: 0.65rem 0.9rem;
+      font-size: 0.9rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-input:focus { border-color: var(--accent); }
+    textarea.form-input { min-height: 90px; resize: vertical; }
+
+    /* Skills Grid */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+    .skill-card {
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      border-radius: var(--r-md);
+      padding: 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .skill-header { display: flex; justify-content: space-between; align-items: center; }
+    .skill-name { font-weight: 600; font-size: 0.95rem; }
+    .skill-cat { font-size: 0.72rem; color: var(--accent); text-transform: uppercase; font-weight: 600; }
+    .skill-bar {
+      height: 6px;
+      background: var(--surface-3);
+      border-radius: 99px;
+      overflow: hidden;
+      margin-top: 0.3rem;
+    }
+    .skill-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ff5a1f, #ff9a56);
+      border-radius: 99px;
+      transition: width 0.6s ease;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--surface-2);
+      border: 1px solid var(--accent);
+      color: var(--ink);
+      padding: 0.8rem 1.4rem;
+      border-radius: var(--r-md);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      transform: translateY(120px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 100;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(6px);
+      display: none;
+      place-items: center;
+      z-index: 50;
+      padding: 1.5rem;
+    }
+    .modal-backdrop.is-open { display: grid; animation: fadeIn 0.2s ease; }
+    .modal-box {
+      background: var(--surface);
+      border: 1px solid var(--line-strong);
+      border-radius: var(--r-lg);
+      padding: 1.8rem;
+      max-width: 600px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+    }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+    /* Mobile Responsive */
+    .menu-btn { display: none; }
+    @media (max-width: 900px) {
+      .sidebar {
+        position: fixed;
+        left: -280px;
+        top: 0;
+        bottom: 0;
+      }
+      .sidebar.open { transform: translateX(280px); }
+      .menu-btn { display: block; }
+      .content-wrap { padding: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="appSidebar">
+    <div class="brand">
+      <div class="brand-mark">A</div>
+      <div>
+        <div class="brand-title">Asif Keloth</div>
+        <div class="brand-sub">Portfolio CRM</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <div class="nav-label">Main</div>
+      <button class="nav-btn is-active" onclick="showTab('overview', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>
+        Overview
+      </button>
+
+      <div class="nav-label">Portfolio Content</div>
+      <button class="nav-btn" onclick="showTab('projects', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/></svg>
+        Projects
+        <span class="badge badge--muted" id="badge-projects">4</span>
+      </button>
+
+      <button class="nav-btn" onclick="showTab('skills', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6l-6 6 6 6M16 6l6 6-6 6M13 4l-2 16"/></svg>
+        Skills
+        <span class="badge badge--muted" id="badge-skills">16</span>
+      </button>
+
+      <button class="nav-btn" onclick="showTab('timeline', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+        Experience &amp; Edu
+        <span class="badge badge--muted">6</span>
+      </button>
+
+      <button class="nav-btn" onclick="showTab('messages', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+        Inquiries
+        <span class="badge badge--accent" id="badge-messages">1</span>
+      </button>
+
+      <div class="nav-label">Identity &amp; Config</div>
+      <button class="nav-btn" onclick="showTab('profile', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>
+        Profile &amp; Bio
+      </button>
+
+      <button class="nav-btn" onclick="showTab('settings', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.9 2.9l-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.6V21a2 2 0 11-4 0v-.2a1.7 1.7 0 00-1-1.6 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 11-2.9-2.9l.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.6-1H3a2 2 0 110-4h.2a1.7 1.7 0 001.6-1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 112.9-2.9l.1.1a1.7 1.7 0 001.9.3H9.5a1.7 1.7 0 001-1.6V3a2 2 0 114 0v.2a1.7 1.7 0 001 1.6 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.9 2.9l-.1.1a1.7 1.7 0 00-.3 1.9V9.5a1.7 1.7 0 001.6 1H21a2 2 0 110 4h-.2a1.7 1.7 0 00-1.6 1z"/></svg>
+        Site Settings
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="status-pill">
+        <span class="status-dot"></span>
+        <span>Local Database Synced</span>
+      </div>
+      <a href="http://127.0.0.1:8000/crm/asif/" target="_blank" class="btn btn--ghost btn--sm" style="width: 100%; justify-content: center; gap: 0.4rem;">
+        <span>Open Django CRM</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="main">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="btn btn--ghost menu-btn" onclick="toggleSidebar()">☰</button>
+        <div class="topbar-title" id="pageTitle">Control Center Overview</div>
+      </div>
+      <div class="topbar-right">
+        <a href="http://127.0.0.1:8000/" target="_blank" class="btn btn--ghost btn--sm">
+          <span>View Live Site</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+        </a>
+        <button onclick="resetData()" class="btn btn--ghost btn--sm" title="Reset all changes to database defaults">Reset Defaults</button>
+        <button onclick="saveAll()" class="btn btn--primary btn--sm">Save Changes</button>
+      </div>
+    </header>
+
+    <div class="content-wrap">
+      
+      <!-- OVERVIEW PANEL -->
+      <section class="tab-panel is-active" id="panel-overview">
+        <div class="welcome-hero">
+          <div>
+            <h2>Welcome back, Asif!</h2>
+            <p>Your portfolio is synchronized with 4 featured projects, 16 verified skills, and updated location in <strong>kannur</strong>. Use this dashboard to manage your content.</p>
+          </div>
+          <div style="display:flex;gap:0.6rem;flex-shrink:0;">
+            <button onclick="showTab('projects')" class="btn btn--primary">Manage Projects</button>
+          </div>
+        </div>
+
+        <div class="grid-stats">
+          <div class="stat-card">
+            <div class="stat-num" id="stat-proj">4</div>
+            <div class="stat-label">Projects Published</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" id="stat-skills">16</div>
+            <div class="stat-label">Skills &amp; Competencies</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">3</div>
+            <div class="stat-label">Experience Milestones</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">3</div>
+            <div class="stat-label">Education Entries</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">3</div>
+            <div class="stat-label">Certifications</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">5</div>
+            <div class="stat-label">Client Testimonials</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" id="stat-msgs" style="color:var(--good);">1</div>
+            <div class="stat-label">Contact Inquiries</div>
+          </div>
+        </div>
+
+        <!-- Recent Projects Quick List -->
+        <div class="card-box">
+          <div class="card-box-header">
+            <div class="card-box-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/></svg>
+              Recent Projects Overview
+            </div>
+            <button onclick="showTab('projects')" class="btn btn--ghost btn--sm">View All &rarr;</button>
+          </div>
+          <div id="overviewProjectsList"></div>
+        </div>
+      </section>
+
+      <!-- PROJECTS PANEL -->
+      <section class="tab-panel" id="panel-projects">
+        <div class="card-box">
+          <div class="card-box-header">
+            <div>
+              <div class="card-box-title">Portfolio Projects</div>
+              <p style="font-size: 0.8rem; color: var(--graphite); margin-top: 0.2rem;">Manage your case studies, covers, live links, and Behance presentations.</p>
+            </div>
+            <button onclick="openNewProjectModal()" class="btn btn--primary btn--sm">+ Add Project</button>
+          </div>
+          <div id="projectsListContainer"></div>
+        </div>
+      </section>
+
+      <!-- SKILLS PANEL -->
+      <section class="tab-panel" id="panel-skills">
+        <div class="card-box">
+          <div class="card-box-header">
+            <div>
+              <div class="card-box-title">Skills &amp; Technologies</div>
+              <p style="font-size: 0.8rem; color: var(--graphite); margin-top: 0.2rem;">Manage UX research, UI design, tools, and proficiency levels.</p>
+            </div>
+            <button onclick="openNewSkillModal()" class="btn btn--primary btn--sm">+ Add Skill</button>
+          </div>
+          <div class="skills-grid" id="skillsGridContainer"></div>
+        </div>
+      </section>
+
+      <!-- TIMELINE PANEL -->
+      <section class="tab-panel" id="panel-timeline">
+        <div class="card-box">
+          <div class="card-box-header">
+            <div class="card-box-title">Work Experience</div>
+          </div>
+          <div id="experienceListContainer"></div>
+        </div>
+
+        <div class="card-box">
+          <div class="card-box-header">
+            <div class="card-box-title">Education &amp; Academics</div>
+          </div>
+          <div id="educationListContainer"></div>
+        </div>
+
+        <div class="card-box">
+          <div class="card-box-header">
+            <div class="card-box-title">Certifications</div>
+          </div>
+          <div id="certificationsListContainer"></div>
+        </div>
+      </section>
+
+      <!-- MESSAGES PANEL -->
+      <section class="tab-panel" id="panel-messages">
+        <div class="card-box">
+          <div class="card-box-header">
+            <div>
+              <div class="card-box-title">Client Inquiries &amp; Messages</div>
+              <p style="font-size: 0.8rem; color: var(--graphite); margin-top: 0.2rem;">Messages received via your portfolio contact form.</p>
+            </div>
+          </div>
+          <div id="messagesListContainer"></div>
+        </div>
+      </section>
+
+      <!-- PROFILE & BIO PANEL -->
+      <section class="tab-panel" id="panel-profile">
+        <div class="card-box">
+          <div class="card-box-header">
+            <div class="card-box-title">Hero Section &amp; Intro</div>
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Eyebrow Role</label>
+              <input type="text" class="form-input" id="prof-eyebrow" value="UI/UX Designer & UI Developer">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Headline Line 1</label>
+              <input type="text" class="form-input" id="prof-h1" value="Designing interfaces">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Headline Line 2</label>
+              <input type="text" class="form-input" id="prof-h2" value="people love to use.">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Years of Experience</label>
+              <input type="number" class="form-input" id="prof-years" value="1">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Projects Shipped Counter</label>
+              <input type="number" class="form-input" id="prof-shipped" value="4">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Happy Clients</label>
+              <input type="number" class="form-input" id="prof-clients" value="1">
+            </div>
+            <div class="form-group full">
+              <label class="form-label">Typed Roles (comma-separated)</label>
+              <input type="text" class="form-input" id="prof-roles" value="UI Designer,UX Designer,UI Developer,Design Systems Builder">
+            </div>
+            <div class="form-group full">
+              <label class="form-label">Hero Statement</label>
+              <textarea class="form-input" id="prof-statement">I turn complex problems into clear, elegant digital products — from first research sketch to production-ready interface.</textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-box">
+          <div class="card-box-header">
+            <div class="card-box-title">About Me &amp; Philosophy</div>
+          </div>
+          <div class="form-grid">
+            <div class="form-group full">
+              <label class="form-label">Intro Paragraph</label>
+              <textarea class="form-input" id="prof-intro">I'm a designer-developer hybrid. I care about the pixel and the person behind the screen in equal measure.</textarea>
+            </div>
+            <div class="form-group full">
+              <label class="form-label">Design Philosophy</label>
+              <textarea class="form-input" id="prof-philosophy">Good design is honest. It removes friction, respects attention, and earns trust one interaction at a time.</textarea>
+            </div>
+            <div class="form-group full">
+              <label class="form-label">Core Values (separated by |)</label>
+              <input type="text" class="form-input" id="prof-values" value="Clarity over cleverness|Users before aesthetics|Systems, not screens|Craft in the details">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SETTINGS PANEL -->
+      <section class="tab-panel" id="panel-settings">
+        <div class="card-box">
+          <div class="card-box-header">
+            <div class="card-box-title">Global Site Settings</div>
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Site Name</label>
+              <input type="text" class="form-input" id="set-name" value="Asif Keloth">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Logo Text Mark</label>
+              <input type="text" class="form-input" id="set-logo" value="AK">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Contact Email</label>
+              <input type="email" class="form-input" id="set-email" value="asifkeloth@gmail.com">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Contact Phone</label>
+              <input type="text" class="form-input" id="set-phone" value="8129654680">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Location</label>
+              <input type="text" class="form-input" id="set-loc" value="kannur">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tagline</label>
+              <input type="text" class="form-input" id="set-tagline" value="UI/UX Designer & UI Developer">
+            </div>
+            <div class="form-group full">
+              <label class="form-label">Footer Note</label>
+              <input type="text" class="form-input" id="set-footer" value="Designed & built with care.">
+            </div>
+            <div class="form-group full">
+              <label class="form-label">SEO Title</label>
+              <input type="text" class="form-input" id="set-seotitle" value="">
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<!-- Modal Dialog -->
+<div class="modal-backdrop" id="appModal" onclick="closeModal(event)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem;">
+      <h3 id="modalTitle" style="font-size:1.2rem;">Add New Project</h3>
+      <button onclick="closeModal()" style="font-size:1.4rem;color:var(--graphite);">&times;</button>
+    </div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<!-- Toast Message -->
+<div class="toast" id="appToast">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#33c48d" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+  <span id="toastText">Changes saved successfully</span>
+</div>
+
+<script>
+  // Initial seeded database state
+  const initialData = {
+  "settings": {
+    "site_name": "Asif Keloth",
+    "tagline": "UI/UX Designer & UI Developer",
+    "email": "asifkeloth@gmail.com",
+    "phone": "8129654680",
+    "location": "kannur",
+    "logo_text": "AK",
+    "footer_note": "Designed & built with care.",
+    "seo_title": "",
+    "seo_description": ""
+  },
+  "profile": {
+    "hero_eyebrow": "UI/UX Designer & UI Developer",
+    "headline_line1": "Designing interfaces",
+    "headline_line2": "people love to use.",
+    "typed_roles": "UI Designer,UX Designer,UI Developer,Design Systems Builder",
+    "statement": "I turn complex problems into clear, elegant digital products \u2014 from first research sketch to production-ready interface.",
+    "years_experience": 1,
+    "projects_shipped": 4,
+    "happy_clients": 1,
+    "about_intro": "I'm a designer-developer hybrid. I care about the pixel and the person behind the screen in equal measure.",
+    "about_philosophy": "Good design is honest. It removes friction, respects attention, and earns trust one interaction at a time.",
+    "about_values": "Clarity over cleverness|Users before aesthetics|Systems, not screens|Craft in the details",
+    "portrait_url": "/media/about/pic_dTBvcCI.jpeg"
+  },
+  "projects": [
+    {
+      "id": 1,
+      "title": "Home Rentel App",
+      "slug": "finch-pay-onboarding",
+      "role": "UI/UX Designer",
+      "year": "2025",
+      "client": "Finch Pay",
+      "summary": "Budget friendly room rental and self secure home stay.",
+      "category": "Mobile App",
+      "cover": "/media/projects/project_page.png",
+      "live_url": "https://www.behance.net/gallery/243507527/Stessfree-Home-Rent-App",
+      "prototype_url": "https://www.behance.net/gallery/243507527/Stessfree-Home-Rent-App",
+      "featured": true,
+      "order": 0
+    },
+    {
+      "id": 2,
+      "title": "Ksrtc Re-design app",
+      "slug": "statlas-analytics-dashboard",
+      "role": "UI/UX Designer",
+      "year": "2024",
+      "client": "Statlas",
+      "summary": "Adding new feature for ksrtc app  easy to use.",
+      "category": "Mobile App",
+      "cover": "/media/projects/COVER.png",
+      "live_url": "https://www.behance.net/gallery/236611253/myKSRTC-App-Re-design-Casestudy",
+      "prototype_url": "https://www.behance.net/gallery/236611253/myKSRTC-App-Re-design-Casestudy",
+      "featured": true,
+      "order": 1
+    },
+    {
+      "id": 3,
+      "title": "Cardinal Design System",
+      "slug": "cardinal-design-system",
+      "role": "UI/UX Designer",
+      "year": "2024",
+      "client": "Cardinal",
+      "summary": "One visual language for four product teams shipping in three frameworks.",
+      "category": "Design System",
+      "cover": "",
+      "live_url": "",
+      "prototype_url": "",
+      "featured": true,
+      "order": 2
+    },
+    {
+      "id": 6,
+      "title": "Northwind Mobile Companion",
+      "slug": "northwind-mobile-companion",
+      "role": "UI/UX Designer",
+      "year": "2025",
+      "client": "Northwind Labs",
+      "summary": "A read-only mobile companion that gives analysts their dashboards on the train.",
+      "category": "Mobile App",
+      "cover": "",
+      "live_url": "",
+      "prototype_url": "",
+      "featured": false,
+      "order": 5
+    }
+  ],
+  "skills": [
+    {
+      "id": 1,
+      "name": "UI Design",
+      "category": "Design",
+      "level": 96,
+      "is_active": true,
+      "order": 0
+    },
+    {
+      "id": 8,
+      "name": "HTML",
+      "category": "Development",
+      "level": 96,
+      "is_active": true,
+      "order": 0
+    },
+    {
+      "id": 11,
+      "name": "Figma",
+      "category": "Tools",
+      "level": 97,
+      "is_active": true,
+      "order": 0
+    },
+    {
+      "id": 2,
+      "name": "UX Design",
+      "category": "Design",
+      "level": 92,
+      "is_active": true,
+      "order": 1
+    },
+    {
+      "id": 9,
+      "name": "CSS",
+      "category": "Development",
+      "level": 94,
+      "is_active": true,
+      "order": 1
+    },
+    {
+      "id": 12,
+      "name": "Adobe XD",
+      "category": "Tools",
+      "level": 88,
+      "is_active": true,
+      "order": 1
+    },
+    {
+      "id": 3,
+      "name": "Design Systems",
+      "category": "Design",
+      "level": 90,
+      "is_active": true,
+      "order": 2
+    },
+    {
+      "id": 10,
+      "name": "JavaScript",
+      "category": "Development",
+      "level": 86,
+      "is_active": true,
+      "order": 2
+    },
+    {
+      "id": 13,
+      "name": "Photoshop",
+      "category": "Tools",
+      "level": 84,
+      "is_active": true,
+      "order": 2
+    },
+    {
+      "id": 4,
+      "name": "User Research",
+      "category": "Design",
+      "level": 85,
+      "is_active": true,
+      "order": 3
+    },
+    {
+      "id": 14,
+      "name": "Illustrator",
+      "category": "Tools",
+      "level": 82,
+      "is_active": true,
+      "order": 3
+    },
+    {
+      "id": 5,
+      "name": "Wireframing",
+      "category": "Design",
+      "level": 94,
+      "is_active": true,
+      "order": 4
+    },
+    {
+      "id": 15,
+      "name": "VS Code",
+      "category": "Tools",
+      "level": 90,
+      "is_active": true,
+      "order": 4
+    },
+    {
+      "id": 6,
+      "name": "Prototyping",
+      "category": "Design",
+      "level": 91,
+      "is_active": true,
+      "order": 5
+    },
+    {
+      "id": 16,
+      "name": "Git & GitHub",
+      "category": "Tools",
+      "level": 85,
+      "is_active": true,
+      "order": 5
+    },
+    {
+      "id": 7,
+      "name": "Responsive Design",
+      "category": "Design",
+      "level": 95,
+      "is_active": true,
+      "order": 6
+    }
+  ],
+  "experience": [
+    {
+      "id": 3,
+      "title": "UI Developer",
+      "org": "Freelance",
+      "period": "2019 \u2014 2021",
+      "description": "Translated designs into fast, accessible, responsive front-ends with HTML, CSS and vanilla JavaScript.",
+      "order": 1
+    },
+    {
+      "id": 2,
+      "title": "UI-DEVELOPMENT",
+      "org": "ZOOPLE TECHNOLOGIES",
+      "period": "2026 \u2014 PRESENT",
+      "description": "I create modern, responsive, and user-friendly interfaces that combine clean design with functional development.",
+      "order": 2
+    },
+    {
+      "id": 7,
+      "title": "UI/UX DESIGNER",
+      "org": "ZOOPLE TECHNOLOGY",
+      "period": "AUG",
+      "description": "Designed 7+ marketing sites, dashboards and mobile apps for startups across fintech and health.",
+      "order": 3
+    }
+  ],
+  "education": [
+    {
+      "id": 5,
+      "title": "Google UX Design Certificate",
+      "org": "Coursera",
+      "period": "2020",
+      "description": "",
+      "order": 1
+    },
+    {
+      "id": 4,
+      "title": "Bcom Finance",
+      "org": "Institute Of Technology Mayyil",
+      "period": "2022 \u2014 2025",
+      "description": "Focus on marketing and finance",
+      "order": 3
+    },
+    {
+      "id": 11,
+      "title": "Higher Secondary Education -Computer Commerce",
+      "org": "Anjarakkandy Higher Secondary School",
+      "period": "2020 \u2014 2022",
+      "description": "",
+      "order": 3
+    }
+  ],
+  "certifications": [
+    {
+      "id": 1,
+      "title": "Google UX Design Certificate",
+      "issuer": "Coursera",
+      "date": "2020",
+      "credential_url": "",
+      "order": 0
+    },
+    {
+      "id": 2,
+      "title": "Advanced Figma for Product Teams",
+      "issuer": "Figma",
+      "date": "2022",
+      "credential_url": "",
+      "order": 1
+    },
+    {
+      "id": 3,
+      "title": "Accessible Web Design",
+      "issuer": "Interaction Design Foundation",
+      "date": "2023",
+      "credential_url": "",
+      "order": 2
+    }
+  ],
+  "testimonials": [
+    {
+      "id": 1,
+      "name": "Priya Nair",
+      "role": "Product Manager, Finch Pay",
+      "quote": "Our onboarding completion rate went from 61% to 84% after the redesign. The research phase alone was worth the fee.",
+      "rating": 5,
+      "featured": true,
+      "order": 0
+    },
+    {
+      "id": 2,
+      "name": "Daniel Okoye",
+      "role": "Founder, Loomly",
+      "quote": "Rare combination: a designer who ships production-quality front-end code. The handoff was the code.",
+      "rating": 5,
+      "featured": true,
+      "order": 1
+    },
+    {
+      "id": 3,
+      "name": "Sara Kim",
+      "role": "Head of Design, Northwind Labs",
+      "quote": "The design system brought four bickering product teams onto one visual language in a quarter.",
+      "rating": 5,
+      "featured": false,
+      "order": 2
+    },
+    {
+      "id": 4,
+      "name": "Marco Ruiz",
+      "role": "CTO, Cardinal",
+      "quote": "Clear communicator, fast iterations, zero ego about feedback. The dashboard finally makes sense to customers.",
+      "rating": 5,
+      "featured": false,
+      "order": 3
+    },
+    {
+      "id": 5,
+      "name": "Anita Joseph",
+      "role": "Marketing Lead, Statlas",
+      "quote": "Our landing page bounce rate dropped by a third. Beautiful work, delivered ahead of schedule.",
+      "rating": 4,
+      "featured": false,
+      "order": 4
+    }
+  ],
+  "messages": [
+    {
+      "id": 3,
+      "name": "jjj@GMAIL.COM",
+      "email": "jasirashirinvalapra@gmail.com",
+      "subject": "ffffff",
+      "message": "JJJJJJJJJJJJJJJJJJJJJ",
+      "is_read": true,
+      "created_at": "Jul 04, 2026 18:58"
+    }
+  ],
+  "counts": {
+    "projects": 4,
+    "skills": 16,
+    "experience": 3,
+    "education": 3,
+    "certifications": 3,
+    "testimonials": 5,
+    "messages": 1,
+    "unread_messages": 0
+  }
+};
+
+  // Load from localStorage or seed
+  let appState = JSON.parse(localStorage.getItem("asif_crm_state")) || initialData;
+
+  function saveToLocal() {
+    localStorage.setItem("asif_crm_state", JSON.stringify(appState));
+  }
+
+  function toast(msg) {
+    const t = document.getElementById("appToast");
+    document.getElementById("toastText").textContent = msg;
+    t.classList.add("show");
+    setTimeout(() => t.classList.remove("show"), 3200);
+  }
+
+  function showTab(tabId, btn) {
+    document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("is-active"));
+    document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("is-active"));
+    
+    const target = document.getElementById("panel-" + tabId);
+    if (target) target.classList.add("is-active");
+    if (btn) btn.classList.add("is-active");
+
+    const titles = {
+      overview: "Control Center Overview",
+      projects: "Projects Management",
+      skills: "Skills & Technical Stack",
+      timeline: "Experience & Education Timeline",
+      messages: "Contact Inquiries & Messages",
+      profile: "Profile & Bio Configuration",
+      settings: "Site Settings & Branding"
+    };
+    document.getElementById("pageTitle").textContent = titles[tabId] || "Control Center";
+    
+    // Close mobile menu if open
+    document.getElementById("appSidebar").classList.remove("open");
+  }
+
+  function toggleSidebar() {
+    document.getElementById("appSidebar").classList.toggle("open");
+  }
+
+  // Render Projects
+  function renderProjects() {
+    const container = document.getElementById("projectsListContainer");
+    const overviewContainer = document.getElementById("overviewProjectsList");
+    
+    let html = "";
+    appState.projects.forEach(p => {
+      const coverImg = p.cover ? `<img src="${p.cover}" class="list-item-thumb" alt="${p.title}">` : `<div class="list-item-thumb" style="display:grid;place-items:center;color:var(--accent);font-weight:700;">PROJ</div>`;
+      html += `
+        <div class="list-item" id="proj-${p.id}">
+          ${coverImg}
+          <div class="list-item-main">
+            <div class="list-item-title">
+              ${p.title}
+              ${p.featured ? '<span class="pill pill--featured">Featured</span>' : ''}
+            </div>
+            <div class="list-item-sub">${p.category} · ${p.role} · ${p.year}</div>
+          </div>
+          <div class="list-item-actions">
+            ${p.live_url ? `<a href="${p.live_url}" target="_blank" class="btn btn--ghost btn--sm">Live</a>` : ''}
+            <button onclick="editProject(${p.id})" class="btn btn--ghost btn--sm">Edit</button>
+            <button onclick="deleteProject(${p.id})" class="btn btn--ghost btn--sm" style="color:var(--bad);">Delete</button>
+          </div>
+        </div>
+      `;
+    });
+    container.innerHTML = html || '<div style="color:var(--graphite);padding:2rem;text-align:center;">No projects found.</div>';
+    overviewContainer.innerHTML = html;
+    document.getElementById("badge-projects").textContent = appState.projects.length;
+    document.getElementById("stat-proj").textContent = appState.projects.length;
+  }
+
+  // Render Skills
+  function renderSkills() {
+    const container = document.getElementById("skillsGridContainer");
+    let html = "";
+    appState.skills.forEach(s => {
+      html += `
+        <div class="skill-card">
+          <div class="skill-header">
+            <div>
+              <div class="skill-name">${s.name}</div>
+              <div class="skill-cat">${s.category}</div>
+            </div>
+            <div style="font-size:0.85rem;font-weight:700;color:var(--accent);">${s.level}%</div>
+          </div>
+          <div class="skill-bar">
+            <div class="skill-bar-fill" style="width: ${s.level}%"></div>
+          </div>
+        </div>
+      `;
+    });
+    container.innerHTML = html;
+    document.getElementById("badge-skills").textContent = appState.skills.length;
+    document.getElementById("stat-skills").textContent = appState.skills.length;
+  }
+
+  // Render Timeline
+  function renderTimeline() {
+    const expContainer = document.getElementById("experienceListContainer");
+    const eduContainer = document.getElementById("educationListContainer");
+    const certContainer = document.getElementById("certificationsListContainer");
+
+    let expHtml = "";
+    appState.experience.forEach(e => {
+      expHtml += `
+        <div class="list-item">
+          <div class="list-item-main">
+            <div class="list-item-title">${e.title} <span class="pill pill--featured">${e.period}</span></div>
+            <div class="list-item-sub" style="font-weight:600;color:var(--ink-soft);">${e.org}</div>
+            <p style="font-size:0.82rem;color:var(--graphite);margin-top:0.4rem;">${e.description || 'Professional role contributions.'}</p>
+          </div>
+        </div>
+      `;
+    });
+    expContainer.innerHTML = expHtml;
+
+    let eduHtml = "";
+    appState.education.forEach(ed => {
+      eduHtml += `
+        <div class="list-item">
+          <div class="list-item-main">
+            <div class="list-item-title">${ed.title} <span class="pill pill--featured">${ed.period}</span></div>
+            <div class="list-item-sub" style="font-weight:600;color:var(--ink-soft);">${ed.org}</div>
+          </div>
+        </div>
+      `;
+    });
+    eduContainer.innerHTML = eduHtml;
+
+    let certHtml = "";
+    appState.certifications.forEach(c => {
+      certHtml += `
+        <div class="list-item">
+          <div class="list-item-main">
+            <div class="list-item-title">${c.title} <span class="pill pill--featured">${c.date}</span></div>
+            <div class="list-item-sub">${c.issuer}</div>
+          </div>
+          ${c.credential_url ? `<a href="${c.credential_url}" target="_blank" class="btn btn--ghost btn--sm">Verify</a>` : ''}
+        </div>
+      `;
+    });
+    certContainer.innerHTML = certHtml;
+  }
+
+  // Render Messages
+  function renderMessages() {
+    const container = document.getElementById("messagesListContainer");
+    let html = "";
+    appState.messages.forEach(m => {
+      html += `
+        <div class="list-item" style="border-left: 3px solid ${m.is_read ? 'var(--line)' : 'var(--accent)'}">
+          <div class="list-item-main">
+            <div class="list-item-title">
+              ${m.name} 
+              ${m.is_read ? '<span class="pill pill--read">Read</span>' : '<span class="pill pill--unread">New</span>'}
+              <span style="font-size:0.75rem;color:var(--graphite);font-weight:normal;margin-left:auto;">${m.created_at}</span>
+            </div>
+            <div class="list-item-sub" style="color:var(--ink);font-weight:500;">${m.subject || 'Portfolio Inquiry'}</div>
+            <p style="font-size:0.84rem;color:var(--ink-soft);margin-top:0.4rem;">${m.message}</p>
+            <div style="font-size:0.78rem;color:var(--accent);margin-top:0.3rem;">Email: ${m.email}</div>
+          </div>
+        </div>
+      `;
+    });
+    container.innerHTML = html || '<div style="color:var(--graphite);padding:2rem;text-align:center;">No inquiries received yet.</div>';
+  }
+
+  // Delete Project
+  function deleteProject(id) {
+    if (!confirm("Are you sure you want to delete this project?")) return;
+    appState.projects = appState.projects.filter(p => p.id !== id);
+    saveToLocal();
+    renderProjects();
+    toast("Project removed.");
+  }
+
+  // Modal handlers
+  function openNewProjectModal() {
+    document.getElementById("modalTitle").textContent = "Add New Project";
+    document.getElementById("modalBody").innerHTML = `
+      <div class="form-grid">
+        <div class="form-group full">
+          <label class="form-label">Project Title</label>
+          <input type="text" class="form-input" id="modal-proj-title" placeholder="e.g. AI Travel Planner">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Category</label>
+          <input type="text" class="form-input" id="modal-proj-cat" value="Product Design">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Role</label>
+          <input type="text" class="form-input" id="modal-proj-role" value="Lead UI/UX Designer">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Year</label>
+          <input type="text" class="form-input" id="modal-proj-year" value="2025">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Live / Behance Link</label>
+          <input type="text" class="form-input" id="modal-proj-url" placeholder="https://behance.net/...">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Project Summary</label>
+          <textarea class="form-input" id="modal-proj-summary" placeholder="Brief 1-2 sentence overview of the project..."></textarea>
+        </div>
+        <div class="form-group full" style="display:flex;align-items:center;gap:0.6rem;">
+          <input type="checkbox" id="modal-proj-featured" checked style="accent-color:var(--accent);width:18px;height:18px;">
+          <label for="modal-proj-featured" class="form-label" style="margin:0;cursor:pointer;">Feature this project on homepage</label>
+        </div>
+      </div>
+      <div style="margin-top:1.4rem;display:flex;justify-content:flex-end;gap:0.8rem;">
+        <button onclick="closeModal()" class="btn btn--ghost">Cancel</button>
+        <button onclick="submitNewProject()" class="btn btn--primary">Create Project</button>
+      </div>
+    `;
+    document.getElementById("appModal").classList.add("is-open");
+  }
+
+  function submitNewProject() {
+    const title = document.getElementById("modal-proj-title").value.trim();
+    if (!title) { alert("Please provide a title."); return; }
+    
+    const newP = {
+      id: Date.now(),
+      title: title,
+      category: document.getElementById("modal-proj-cat").value,
+      role: document.getElementById("modal-proj-role").value,
+      year: document.getElementById("modal-proj-year").value,
+      live_url: document.getElementById("modal-proj-url").value,
+      summary: document.getElementById("modal-proj-summary").value,
+      featured: document.getElementById("modal-proj-featured").checked,
+      cover: ""
+    };
+
+    appState.projects.unshift(newP);
+    saveToLocal();
+    renderProjects();
+    closeModal();
+    toast("New project created successfully!");
+  }
+
+  function openNewSkillModal() {
+    document.getElementById("modalTitle").textContent = "Add New Skill";
+    document.getElementById("modalBody").innerHTML = `
+      <div class="form-grid">
+        <div class="form-group full">
+          <label class="form-label">Skill Name</label>
+          <input type="text" class="form-input" id="modal-skill-name" placeholder="e.g. Next.js, Spline 3D">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Category</label>
+          <select class="form-input" id="modal-skill-cat">
+            <option value="UX Research">UX Research</option>
+            <option value="UI/UX Design" selected>UI/UX Design</option>
+            <option value="Tools &amp; Development">Tools &amp; Development</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Proficiency Level (%)</label>
+          <input type="number" class="form-input" id="modal-skill-level" value="90" min="10" max="100">
+        </div>
+      </div>
+      <div style="margin-top:1.4rem;display:flex;justify-content:flex-end;gap:0.8rem;">
+        <button onclick="closeModal()" class="btn btn--ghost">Cancel</button>
+        <button onclick="submitNewSkill()" class="btn btn--primary">Save Skill</button>
+      </div>
+    `;
+    document.getElementById("appModal").classList.add("is-open");
+  }
+
+  function submitNewSkill() {
+    const name = document.getElementById("modal-skill-name").value.trim();
+    if (!name) return;
+    appState.skills.push({
+      id: Date.now(),
+      name: name,
+      category: document.getElementById("modal-skill-cat").value,
+      level: parseInt(document.getElementById("modal-skill-level").value) || 90
+    });
+    saveToLocal();
+    renderSkills();
+    closeModal();
+    toast("Skill added!");
+  }
+
+  function closeModal() {
+    document.getElementById("appModal").classList.remove("is-open");
+  }
+
+  function saveAll() {
+    // Save Profile inputs
+    appState.profile.hero_eyebrow = document.getElementById("prof-eyebrow").value;
+    appState.profile.headline_line1 = document.getElementById("prof-h1").value;
+    appState.profile.headline_line2 = document.getElementById("prof-h2").value;
+    appState.profile.years_experience = parseInt(document.getElementById("prof-years").value) || 6;
+    appState.profile.projects_shipped = parseInt(document.getElementById("prof-shipped").value) || 48;
+    appState.profile.happy_clients = parseInt(document.getElementById("prof-clients").value) || 32;
+    appState.profile.typed_roles = document.getElementById("prof-roles").value;
+    appState.profile.statement = document.getElementById("prof-statement").value;
+    appState.profile.about_intro = document.getElementById("prof-intro").value;
+    appState.profile.about_philosophy = document.getElementById("prof-philosophy").value;
+    appState.profile.about_values = document.getElementById("prof-values").value;
+
+    // Save Settings inputs
+    appState.settings.site_name = document.getElementById("set-name").value;
+    appState.settings.logo_text = document.getElementById("set-logo").value;
+    appState.settings.email = document.getElementById("set-email").value;
+    appState.settings.phone = document.getElementById("set-phone").value;
+    appState.settings.location = document.getElementById("set-loc").value;
+    appState.settings.tagline = document.getElementById("set-tagline").value;
+    appState.settings.footer_note = document.getElementById("set-footer").value;
+    appState.settings.seo_title = document.getElementById("set-seotitle").value;
+
+    saveToLocal();
+    toast("All dashboard changes saved to persistent storage!");
+  }
+
+  function resetData() {
+    if (!confirm("Reset all settings and data back to initial database defaults?")) return;
+    localStorage.removeItem("asif_crm_state");
+    appState = JSON.parse(JSON.stringify(initialData));
+    renderProjects();
+    renderSkills();
+    renderTimeline();
+    renderMessages();
+    toast("Reset back to defaults.");
+  }
+
+  // Initial render on boot
+  document.addEventListener("DOMContentLoaded", () => {
+    renderProjects();
+    renderSkills();
+    renderTimeline();
+    renderMessages();
+  });
+</script>
+
+</body>
+</html>
