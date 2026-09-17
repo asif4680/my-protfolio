@@ -23,7 +23,7 @@
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.1.14/swiper-bundle.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
-  <link rel="stylesheet" href="{% static 'css/main.css' %}?v=9.0">
+  <link rel="stylesheet" href="{% static 'css/main.css' %}?v=12.0">
   {% block extra_head %}{% endblock %}
 </head>
 <body>
@@ -141,37 +141,5 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.1.0/typed.umd.js"></script>
   <script src="{% static 'js/main.js' %}"></script>
-  <!-- Lightbox Modal for Full Image View -->
-  <div id="imageLightbox" class="lightbox-modal" onclick="closeImageModal()">
-    <div class="lightbox-modal__content" onclick="event.stopPropagation()">
-      <button class="lightbox-modal__close" onclick="closeImageModal()" aria-label="Close modal">&times;</button>
-      <img id="lightboxImg" src="" alt="Full image preview">
-      <div id="lightboxCaption" class="lightbox-modal__caption"></div>
-    </div>
-  </div>
-
-  <script>
-    function openImageModal(src, title) {
-      var modal = document.getElementById("imageLightbox");
-      var img = document.getElementById("lightboxImg");
-      var caption = document.getElementById("lightboxCaption");
-      if (modal && img) {
-        img.src = src;
-        if (caption) caption.textContent = title || "";
-        modal.classList.add("is-open");
-        document.body.style.overflow = "hidden";
-      }
-    }
-    function closeImageModal() {
-      var modal = document.getElementById("imageLightbox");
-      if (modal) {
-        modal.classList.remove("is-open");
-        document.body.style.overflow = "";
-      }
-    }
-    document.addEventListener("keydown", function(e) {
-      if (e.key === "Escape") closeImageModal();
-    });
-  </script>
 </body>
 </html>
