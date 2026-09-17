@@ -267,6 +267,31 @@ class Project(OrderedModel):
         return self.title
 
     @property
+    def embed_url(self):
+        """Converts raw Behance, Figma, or prototype URLs into embed-safe iframe URLs."""
+        if not self.prototype_url:
+            return ""
+        url = self.prototype_url.strip()
+        import re, urllib.parse
+        # Behance: https://www.behance.net/gallery/243507527/... -> https://www.behance.net/embed/project/243507527?ilo0=1
+        behance_match = re.search(r'behance\.net/(?:gallery|embed/project)/(\d+)', url)
+        if behance_match:
+            project_id = behance_match.group(1)
+            return f"https://www.behance.net/embed/project/{project_id}?ilo0=1"
+        # Figma: convert share link to official embed wrapper
+        if "figma.com" in url and "figma.com/embed" not in url:
+            return f"https://www.figma.com/embed?embed_host=share&url={urllib.parse.quote(url, safe='')}"
+        return url
+
+    @property
+    def is_behance(self):
+        return bool(self.prototype_url and "behance.net" in self.prototype_url)
+
+    @property
+    def is_figma(self):
+        return bool(self.prototype_url and "figma.com" in self.prototype_url)
+
+    @property
     def sections(self):
         """Ordered (label, body) pairs for non-empty narrative sections."""
         spec = [

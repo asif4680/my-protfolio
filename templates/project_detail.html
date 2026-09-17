@@ -41,9 +41,26 @@
 
       {% if project.prototype_url %}
       <div class="article__section" data-aos="fade-up">
-        <h2>Prototype preview</h2>
+        <div class="proto-header">
+          <h2>
+            {% if project.is_behance %}Behance Case Study
+            {% elif project.is_figma %}Interactive Prototype
+            {% else %}Prototype preview{% endif %}
+          </h2>
+          <a href="{{ project.prototype_url }}" target="_blank" rel="noopener" class="link-arrow" data-cursor="hover">
+            {% if project.is_behance %}Open on Behance <span class="arrow">↗</span>
+            {% elif project.is_figma %}Open in Figma <span class="arrow">↗</span>
+            {% else %}Open preview <span class="arrow">↗</span>{% endif %}
+          </a>
+        </div>
         <div class="proto-frame">
-          <iframe src="{{ project.prototype_url }}" title="Interactive prototype of {{ project.title }}" loading="lazy" allowfullscreen></iframe>
+          <iframe src="{{ project.embed_url }}" title="{{ project.title }} preview" loading="lazy" allowfullscreen allow="clipboard-write" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+        </div>
+        <div class="proto-footer">
+          <span>Having trouble viewing the embedded preview?</span>
+          <a href="{{ project.prototype_url }}" target="_blank" rel="noopener" class="link-arrow" data-cursor="hover">
+            View full presentation on {% if project.is_behance %}Behance{% elif project.is_figma %}Figma{% else %}external site{% endif %} <span class="arrow">↗</span>
+          </a>
         </div>
       </div>
       {% endif %}
