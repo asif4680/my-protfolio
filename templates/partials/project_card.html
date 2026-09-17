@@ -6,6 +6,10 @@
     {% if project.category %}<span class="project-card__tag">{{ project.category.name }}</span>{% endif %}
     {% if project.cover %}
       <img src="{{ project.cover.url }}" alt="{{ project.title }} cover" loading="lazy">
+      <button type="button" class="project-card__zoom" onclick="event.preventDefault(); event.stopPropagation(); openImageModal('{{ project.cover.url }}', '{{ project.title|escapejs }}');" title="View Full Image">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+        <span>Full Image</span>
+      </button>
     {% else %}
       <div class="project-card__ph">
         <span>{{ project.title|slice:":2"|upper }}</span>
